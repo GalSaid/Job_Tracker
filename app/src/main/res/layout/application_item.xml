@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:layout_margin="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="horizontal">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/application_LBL_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="12dp"
+            android:textSize="18sp"
+            android:textColor="#1F304c"
+            android:textStyle="bold"
+            android:text="Job Title"
+            />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/application_IMAGEVIEW_plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_plus"
+
+            />
+
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/job_LBL_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/job_LBL_name"
+        android:layout_alignStart="@id/job_LBL_name"
+        android:layout_marginTop="@dimen/data_end_margin"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/data_end_margin"
+        android:maxLines="1"
+        android:minLines="1"
+        android:drawableStart="@drawable/ic_marker"
+        android:drawablePadding="4dp"
+        android:textSize="@dimen/data_text_size"
+        tools:text="Rishon Lezion, Israel" />
+
+    <CheckBox android:id="@+id/application_CHECKBOX_returned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Returned" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/spinner_style"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Spinner
+            android:id="@+id/application_SPINNER_status"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:entries="@array/status_array"
+            android:spinnerMode="dialog" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:orientation="horizontal">
+
+        <!--Child RecyclerView-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_LST_events"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/event_item"/>
+
+    </LinearLayout>
+</LinearLayout> 

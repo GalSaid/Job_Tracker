@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "353371214623",
+    "project_id": "job-tracker-8b2b8",
+    "storage_bucket": "job-tracker-8b2b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353371214623:android:d84d3f0060f3c62546d62a",
+        "android_client_info": {
+          "package_name": "com.example.jobtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLkZseFqVy79Qq0-EmKaarZf_eYBHbGYc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

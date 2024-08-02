@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/job_CARD"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/poster_height"
+        android:layout_marginVertical="@dimen/poster_vertical_margin"
+        android:layout_marginStart="@dimen/poster_vertical_margin"
+        android:elevation="@dimen/poster_elevation"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/job_item_color"
+        app:cardMaxElevation="12dp"
+        app:cardPreventCornerOverlap="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:shadowColor="#80000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:shadowColor="#80000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="8">
+
+            <com.google.android.material.imageview.ShapeableImageView
+
+                android:id="@+id/job_IMG_company"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/img_dimens"
+                android:layout_margin="@dimen/img_margin"
+                android:scaleType="fitCenter"
+                android:src="@drawable/img_picture"
+                />
+
+        </LinearLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_margin="@dimen/data_margin">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/job_LBL_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/data_end_margin"
+                    android:layout_marginBottom="@dimen/data_margin"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="@dimen/data_end_margin"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textSize="@dimen/data_text_size"
+                    tools:text="2024-01-01" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/job_LBL_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/data_end_margin"
+                    android:layout_below="@id/job_LBL_date"
+                    android:layout_alignStart="@id/job_LBL_date"
+                    android:maxLines="2"
+                    android:minLines="1"
+                    android:textSize="@dimen/title_text_size"
+                    android:textColor="@color/job_date_color"
+                    android:textStyle="bold"
+                    tools:text="Job Name" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/job_LBL_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/job_LBL_name"
+                    android:layout_alignStart="@id/job_LBL_name"
+                    android:layout_marginTop="@dimen/data_end_margin"
+                    android:layout_marginEnd="@dimen/data_end_margin"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:drawableStart="@drawable/ic_marker"
+                    android:drawablePadding="2dp"
+                    android:textSize="@dimen/data_text_size"
+                    tools:text="Rishon Lezion, Israel" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yellow_100">#FFF9C4</color>
+    <color name="yellow_400">#FFEE58</color>
+    <color name="orange_400">#FFA726</color>
+    <color name="job_item_color">#91ADD0</color>
+    <color name="title_color">#1D4271</color>
+    <color name="background_apps_color">#EEF3F7</color>
+    <color name="job_date_color">#4E5356</color>
+    <color name="background_color">#D9DBDC</color>
+
+
+</resources>

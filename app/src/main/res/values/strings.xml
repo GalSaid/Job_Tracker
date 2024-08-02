@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Job Tracker</string>
+    <string name="new_jobs">New Jobs</string>
+    <string name="name_event">Title</string>
+    <string name="update_date">Update date</string>
+    <string name="description">Description</string>
+    <string name="log_out">Log out</string>
+    <string name="profile">Profile</string>
+    <string name="all_jobs">All Jobs</string>
+    <string name="my_applications">My Applications</string>
+    <string name="navigation_header">Navigation header</string>
+    <string name="android_studio">Android Studio</string>
+    <string name="android_studio_android_com">android.studio@android.com</string>
+    <string name="job_tracker">Job Tracker</string>
+    <string-array name="status_array">
+        <item>Pending</item>
+        <item>In Process</item>
+        <item>Rejected</item>
+        <item>Accepted</item>
+    </string-array>
+    <string name="menu_drawer_open">Drawer Open</string>
+    <string name="menu_drawer_close">Drawer Close</string>
+
+</resources>

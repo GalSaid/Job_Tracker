@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--CardView that holds the elements
+        of the child RecyclerView -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="16dp"
+        android:layout_margin="12dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/event_LBL_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/data_text_size"
+                    android:text="she returned after one 1"
+                    />
+
+                <!--Text in the CardView-->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/event_LBL_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:maxLines="3"
+                    android:minLines="1"
+                    android:textSize="@dimen/data_text_size"
+                    android:text="she returned after one 1"
+                    />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/event_LBL_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/data_end_margin"
+                android:layout_marginBottom="@dimen/data_margin"
+                android:layout_marginEnd="@dimen/data_end_margin"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:minLines="1"
+                android:textSize="@dimen/data_text_size"
+                android:text="2024-01-01" />
+
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+
+                android:id="@+id/event_IMAGEVIEW_Edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="52dp"
+                android:src="@drawable/ic_pencil"
+
+                />
+
+        </LinearLayout>
+
+            </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>
