@@ -48,7 +48,6 @@ public class ActivityWelcome extends AppCompatActivity {
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
         startActivity(i);
-        finish();
     }
 
     private void moveToRegister(){
@@ -56,7 +55,6 @@ public class ActivityWelcome extends AppCompatActivity {
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
         startActivity(i);
-        finish();
     }
 
 }

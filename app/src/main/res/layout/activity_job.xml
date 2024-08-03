@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Views.JobActivity">
+    tools:context=".Views.ActivityJob">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,13 +22,13 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="23dp"
             android:layout_marginBottom="32dp"
-            android:text="Software developer"
+            tools:text="Software developer"
             android:textColor="@color/title_color"
             android:textStyle="bold"
             android:textSize="24sp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/job_description_LBL_fullTime"
+            android:id="@+id/job_description_LBL_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -39,7 +39,7 @@
             android:drawableStart="@drawable/ic_badge"
             android:drawablePadding="12dp"
             android:textSize="@dimen/data_text_size"
-            android:text="Intel" />
+            tools:text="Intel" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/job_description_LBL_full_time"
@@ -52,7 +52,7 @@
             android:drawableStart="@drawable/ic_briefcase"
             android:drawablePadding="12dp"
             android:textSize="@dimen/data_text_size"
-            android:text="Full Time" />
+            tools:text="Full Time" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/job_description_LBL_location"
@@ -66,7 +66,7 @@
             android:drawableStart="@drawable/ic_marker"
             android:drawablePadding="12dp"
             android:textSize="@dimen/data_text_size"
-            android:text="Rishon Lezion, Israel" />
+            tools:text="Rishon Lezion, Israel" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/job_description_LBL_about_title"
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginBottom="12dp"
-            android:text="At [Company Name], we are committed to [brief company mission or value statement]. As a leader in [industry or field], our team is dedicated to [briefly describe company culture, achievements, or what sets it apart]. We believe in [key values or beliefs] and strive to [impact or goal]. Join us and be part of a dynamic team that’s shaping the future of [industry or specific area]."
+            tools:text="At [Company Name], we are committed to [brief company mission or value statement]. As a leader in [industry or field], our team is dedicated to [briefly describe company culture, achievements, or what sets it apart]. We believe in [key values or beliefs] and strive to [impact or goal]. Join us and be part of a dynamic team that’s shaping the future of [industry or specific area]."
             android:textSize="@dimen/data_text_size"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginBottom="12dp"
-            android:text="We are seeking a motivated and skilled [Position Name] to join our [department or team name]. In this role, you will [briefly outline the main responsibilities]. You will work closely with [mention any departments or teams they will interact with] to [specific goals or tasks]. The ideal candidate will be [describe the type of person you’re looking for, including qualities or experiences]."
+            tools:text="We are seeking a motivated and skilled [Position Name] to join our [department or team name]. In this role, you will [briefly outline the main responsibilities]. You will work closely with [mention any departments or teams they will interact with] to [specific goals or tasks]. The ideal candidate will be [describe the type of person you’re looking for, including qualities or experiences]."
             android:textSize="@dimen/data_text_size"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -124,12 +124,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginBottom="34dp"
-            android:text="1.Education: [Degree or education level required, if any]\n
+            android:layout_marginBottom="12dp"
+            tools:text="1.Education: [Degree or education level required, if any]\n
 2.Experience: [Number of years of relevant experience, or specific experience required]\n
 3.Skills: [Key skills or proficiencies needed, e.g., technical skills, software, etc.]\n
 4.Certifications: [Any necessary certifications or licenses]\n
 5.Personal Attributes: [Key personal attributes, e.g., strong communication skills, ability to work in a team, etc.]"
             android:textSize="@dimen/data_text_size"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/job_apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/apply"/>
     </LinearLayout>
 </ScrollView>

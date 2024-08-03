@@ -3,25 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.MyApplicationsActivity">
+    tools:context=".Views.ActivityMyApplications">
 
-<com.google.android.material.textview.MaterialTextView
-            android:id="@+id/application_LBL_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:text="My Applications"
-            android:textColor="@color/title_color"
-            android:textStyle="bold"
-            android:textSize="24sp"/>
+
 
         <!-- This is the parent RecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/application_recyclerview"
-            android:layout_below="@+id/application_LBL_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"

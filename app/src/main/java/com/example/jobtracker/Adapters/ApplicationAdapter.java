@@ -18,6 +18,7 @@ import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.R;
 import com.example.jobtracker.Utilities.ImageLoader;
+import com.example.jobtracker.Utilities.MyDbManager;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -55,12 +56,16 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     @Override
     public void onBindViewHolder(@NonNull AppViewHolder holder, int position) {
         Application app = getItem(position);
+        MyDbManager.getInstance().getSpecificJob(app.getJobId(), job->{
+            holder.application_LBL_title.setText(job.getName());
+            holder.application_LBL_location.setText(job.getLocation());
+        });
+        holder.application_LBL_date.setText(app.getDate());
         if(app.isReturned())
             holder.application_CHECKBOX_returned.setChecked(true);
         else
             holder.application_CHECKBOX_returned.setChecked(false);
-        holder.application_LBL_title.setText(app.getTitle());
-
+        String status = app.getStatus();
         // Create a layout manager
         // to assign a layout
         // to the RecyclerView.
@@ -118,6 +123,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     public class AppViewHolder extends RecyclerView.ViewHolder {
 
         private final MaterialTextView application_LBL_title;
+        private final MaterialTextView application_LBL_location;
+        private final MaterialTextView application_LBL_date;
         private final ShapeableImageView application_IMAGEVIEW_plus;
         private final CheckBox application_CHECKBOX_returned;
         private RecyclerView ChildRecyclerView;
@@ -128,16 +135,17 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             application_LBL_title = itemView.findViewById(R.id.application_LBL_title);
             application_IMAGEVIEW_plus = itemView.findViewById(R.id.application_IMAGEVIEW_plus);
             application_CHECKBOX_returned = itemView.findViewById(R.id.application_CHECKBOX_returned);
+            application_LBL_location=itemView.findViewById(R.id.application_LBL_location);
+            application_LBL_date=itemView.findViewById(R.id.application_LBL_date);
             application_SPINNER_status=itemView.findViewById(R.id.application_SPINNER_status);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                    itemView.getContext(),
-                    R.array.status_array,
-                    android.R.layout.simple_spinner_item
-            );
-            // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner.
-            application_SPINNER_status.setAdapter(adapter);
+//            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                    R.array.status_array, android.R.layout.simple_spinner_item);
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            application_SPINNER_status.setAdapter(adapter);
+//
+//            // on below line we are setting adapter for spinner.
+//            application_SPINNER_status.setAdapter(adapter);
+
             ChildRecyclerView
                     = itemView
                     .findViewById(

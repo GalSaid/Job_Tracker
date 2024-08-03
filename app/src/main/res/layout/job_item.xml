@@ -40,11 +40,15 @@
             <com.google.android.material.imageview.ShapeableImageView
 
                 android:id="@+id/job_IMG_company"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/img_dimens"
                 android:layout_height="@dimen/img_dimens"
                 android:layout_margin="@dimen/img_margin"
-                android:scaleType="fitCenter"
-                android:src="@drawable/img_picture"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+                app:srcCompat="@drawable/img_picture"
                 />
 
         </LinearLayout>

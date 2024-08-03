@@ -8,6 +8,19 @@
     android:background="@drawable/rounded_corners"
     android:layout_margin="12dp">
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/application_LBL_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/data_end_margin"
+        android:maxLines="1"
+        android:minLines="1"
+        android:textSize="@dimen/data_text_size"
+        tools:text="2024-01-01" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +35,7 @@
             android:textSize="18sp"
             android:textColor="#1F304c"
             android:textStyle="bold"
-            android:text="Job Title"
+            tools:text="Job Title"
             />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -38,7 +51,7 @@
     </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/job_LBL_location"
+        android:id="@+id/application_LBL_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/job_LBL_name"
@@ -52,6 +65,8 @@
         android:drawablePadding="4dp"
         android:textSize="@dimen/data_text_size"
         tools:text="Rishon Lezion, Israel" />
+
+
 
     <CheckBox android:id="@+id/application_CHECKBOX_returned"
         android:layout_width="wrap_content"

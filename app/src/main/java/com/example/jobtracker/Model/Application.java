@@ -1,17 +1,14 @@
 package com.example.jobtracker.Model;
 
-import com.example.jobtracker.Utilities.Status;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Application {
     private String title;
     private boolean returned;
-    private Status status;
+    private String status;
     private String userId;
     private String jobId;
+    private String date; //The date the position opened
     private HashMap<String, AppEvent> allEvents = new HashMap<>();
 
     public Application() {
@@ -25,11 +22,11 @@ public class Application {
         this.title = title;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -59,6 +56,14 @@ public class Application {
 
     public HashMap<String, AppEvent> getAllEvents() {
         return allEvents;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setAllEvents(HashMap<String, AppEvent> allEvents) {

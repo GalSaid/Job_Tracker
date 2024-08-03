@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.JobBoardActivity">
+    tools:context=".Views.ActivityJobBoard">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/job_board_LBL_title"

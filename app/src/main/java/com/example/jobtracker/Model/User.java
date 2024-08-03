@@ -9,6 +9,8 @@ public class User {
     private String email;
     private String phoneNumber;
     private String description;
+    private String pdfCV;
+    private String wordCV;
     private HashMap<String, Integer> myApplications = new HashMap<>();
 
     public User() {}
@@ -55,6 +57,22 @@ public class User {
 
     public HashMap<String, Integer> getMyApplications() {
         return myApplications;
+    }
+
+    public String getPdfCV() {
+        return pdfCV;
+    }
+
+    public void setPdfCV(String pdfCV) {
+        this.pdfCV = pdfCV;
+    }
+
+    public String getWordCV() {
+        return wordCV;
+    }
+
+    public void setWordCV(String wordCV) {
+        this.wordCV = wordCV;
     }
 
     public void setMyApplications(HashMap<String, Integer> myApplications) {

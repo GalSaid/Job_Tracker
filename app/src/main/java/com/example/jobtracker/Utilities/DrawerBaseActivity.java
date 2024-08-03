@@ -1,8 +1,6 @@
 package com.example.jobtracker.Utilities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,9 +13,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.jobtracker.R;
-import com.example.jobtracker.Views.JobBoardActivity;
-import com.example.jobtracker.Views.MyApplicationsActivity;
-import com.example.jobtracker.databinding.ActivityLoginBinding;
+import com.example.jobtracker.Views.ActivityProfile;
+import com.example.jobtracker.Views.ActivityWelcome;
+import com.example.jobtracker.Views.ActivityJobBoard;
+import com.example.jobtracker.Views.ActivityMyApplications;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 public class DrawerBaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,12 +45,17 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
         if(item.getItemId()==R.id.nav_allJobs){
-            startActivity(new Intent(this, JobBoardActivity.class));
+            startActivity(new Intent(this, ActivityJobBoard.class));
             overridePendingTransition(0,0);
         }
         else if(item.getItemId()== R.id.nav_myApplications){
-            startActivity(new Intent(this, MyApplicationsActivity.class));
+            startActivity(new Intent(this, ActivityMyApplications.class));
             overridePendingTransition(0,0);
+        } else if (item.getItemId() == R.id.nav_profile) {
+            startActivity(new Intent(this, ActivityProfile.class));
+            overridePendingTransition(0, 0);
+        } else if(item.getItemId()==R.id.nav_logout){
+            logOut();
         }
         return false;
     }
@@ -56,5 +63,17 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
     protected void allocateActivityTitle(String titleSting){
         if(getSupportActionBar()!=null)
             getSupportActionBar().setTitle(titleSting);
+    }
+
+    private void logOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(DrawerBaseActivity.this, ActivityWelcome.class));
+                        finish();
+
+                    }
+                });
     }
 }

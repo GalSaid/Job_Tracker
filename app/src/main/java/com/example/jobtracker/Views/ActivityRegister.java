@@ -1,7 +1,8 @@
 package com.example.jobtracker.Views;
 
-import android.app.ProgressDialog;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
+import com.example.jobtracker.Utilities.StorageManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -35,6 +39,10 @@ public class ActivityRegister extends AppCompatActivity {
     private TextInputLayout  layout_EDT_description;
     private TextInputLayout layout_EDT_password;
     private MaterialButton register_BTN_register;
+    private MaterialButton btn_pdf;
+    private MaterialButton btn_word;
+    private Uri uri_pdf;
+    private Uri uri_word;
     private ProgressBar progress_bar;
     private FirebaseAuth mAuth;
 
@@ -62,11 +70,51 @@ public class ActivityRegister extends AppCompatActivity {
         layout_EDT_password =findViewById(R.id.layout_EDT_password );
         register_BTN_register=findViewById(R.id.register_BTN_register);
         progress_bar=findViewById(R.id.progress_bar);
+        btn_pdf=findViewById(R.id.btn_pdf);
+        btn_word=findViewById(R.id.btn_word);
 
     }
 
     private void initViews(){
         register_BTN_register.setOnClickListener((v) -> register());
+        btn_pdf.setOnClickListener((v) -> uploadPdfCV());
+        btn_word.setOnClickListener((v) -> uploadWordCV());
+    }
+
+
+    private ActivityResultLauncher<Intent> launcherPdf=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if(result.getResultCode()==RESULT_OK && result.getData()!=null){
+            Intent data=result.getData();
+            if(data!=null && data.getData()!=null){
+                uri_pdf=data.getData();
+                Toast.makeText(ActivityRegister.this,StorageManager.getInstance().getFileName(uri_pdf)+" has been uploaded",Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    private ActivityResultLauncher<Intent> launcherWord= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if(result.getResultCode()==RESULT_OK && result.getData()!=null){
+            Intent data=result.getData();
+            if(data!=null && data.getData()!=null){
+                uri_word=data.getData();
+                Toast.makeText(ActivityRegister.this,StorageManager.getInstance().getFileName(uri_word)+" has been uploaded",Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    private void uploadWordCV(){
+        Intent intent = new Intent();
+        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcherWord.launch(Intent.createChooser(intent, "Select WORD"));
+    }
+
+
+    private void uploadPdfCV(){
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcherPdf.launch(Intent.createChooser(intent, "Select PDF"));
     }
 
     private void register(){
@@ -104,8 +152,12 @@ public class ActivityRegister extends AppCompatActivity {
             valid=false;
         }
         if(password.length() < 6){
-            layout_EDT_password.setError("Please enter password");
+            layout_EDT_password.setError("Please enter password with at least 6 characters");
             layout_EDT_password.requestFocus();
+            valid=false;
+        }
+        if(uri_pdf==null && uri_word==null){
+                Toast.makeText(ActivityRegister.this, "Please upload your CV",Toast.LENGTH_SHORT).show();
             valid=false;
         }
         if(valid){
@@ -123,6 +175,8 @@ public class ActivityRegister extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             Toast.makeText(ActivityRegister.this, "User registered Successfully",Toast.LENGTH_SHORT).show();
                                             moveToAllJobs();
+                                            StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
+                                            StorageManager.getInstance().uploadWordCVToFB(uri_word);
                                         }
                                         else{
                                             Toast.makeText(ActivityRegister.this, "User failed to register",Toast.LENGTH_SHORT).show();
@@ -140,7 +194,7 @@ public class ActivityRegister extends AppCompatActivity {
     }
 
     private void moveToAllJobs(){
-        Intent i = new Intent(getApplicationContext(), JobBoardActivity.class);
+        Intent i = new Intent(getApplicationContext(), ActivityJobBoard.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
         startActivity(i);

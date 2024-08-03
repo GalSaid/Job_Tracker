@@ -1,7 +1,6 @@
 package com.example.jobtracker.Adapters;
 
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +44,9 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
         Job job = getItem(position);
-        ImageLoader.getInstance().load(job.getImg_company(), holder.job_IMG_company);
+        ImageLoader.getInstance().load(job.getCompanyImg(), holder.job_IMG_company);
         holder.job_LBL_name.setText(job.getName());
-        holder.job_LBL_date.setText(String.valueOf(job.getDate().format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"))));
+        holder.job_LBL_date.setText(job.getDate());
         holder.job_LBL_location.setText(String.valueOf(job.getLocation()));
 
     }

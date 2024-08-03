@@ -1,9 +1,7 @@
 package com.example.jobtracker.Views;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,9 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
-import com.example.jobtracker.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -23,7 +19,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityLogin extends AppCompatActivity {
 
@@ -117,7 +112,7 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     private void moveToAllJobs(){
-        Intent i = new Intent(getApplicationContext(), JobBoardActivity.class);
+        Intent i = new Intent(getApplicationContext(), ActivityJobBoard.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
         startActivity(i);

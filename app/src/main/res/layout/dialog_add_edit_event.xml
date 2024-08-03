@@ -25,7 +25,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -39,19 +40,25 @@
             android:layout_height="wrap_content"
             android:minLines="3"
             android:maxLines="7"
+            android:inputType="text"
         />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_input_update_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/update_date">
+        android:hint="@string/update_date"
+        app:startIconDrawable="@drawable/ic_date"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_update_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:focusable="false"
+            android:inputType="datetime"
+         />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
