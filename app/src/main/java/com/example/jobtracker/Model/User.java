@@ -11,7 +11,7 @@ public class User {
     private String description;
     private String pdfCV;
     private String wordCV;
-    private HashMap<String, Integer> myApplications = new HashMap<>();
+    private HashMap<String, Application> myApplications = new HashMap<>();
 
     public User() {}
 
@@ -55,7 +55,7 @@ public class User {
         this.description = description;
     }
 
-    public HashMap<String, Integer> getMyApplications() {
+    public HashMap<String, Application> getMyApplications() {
         return myApplications;
     }
 
@@ -75,7 +75,7 @@ public class User {
         this.wordCV = wordCV;
     }
 
-    public void setMyApplications(HashMap<String, Integer> myApplications) {
+    public void setMyApplications(HashMap<String, Application> myApplications) {
         this.myApplications = myApplications;
     }
 }

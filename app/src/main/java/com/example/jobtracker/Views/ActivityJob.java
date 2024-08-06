@@ -4,8 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
@@ -37,7 +37,9 @@ public class ActivityJob extends AppCompatActivity {
     private MaterialTextView job_description_LBL_content;
     private MaterialButton job_apply;
     private DatabaseReference databaseReference;
-    private Uri uriCV=null;
+    private String uriCV=null;
+    private Job job;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class ActivityJob extends AppCompatActivity {
     }
 
     private void initJobDetails(Job job) {
+        this.job=job;
         job_description_LBL_name.setText(job.getName());
         job_description_LBL_fullTime.setText(job.isFullTime() ?getString(R.string.full_time):getString(R.string.part_time));
         job_description_LBL_company.setText(job.getCompanyName());
@@ -70,7 +73,7 @@ public class ActivityJob extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //apply to job
-                showApplayDialog(job);
+                showApplyDialog(job);
 
             }
         });
@@ -86,9 +89,10 @@ public class ActivityJob extends AppCompatActivity {
         job_apply= findViewById(R.id.job_apply);
     }
 
-    private void showApplayDialog(Job job) {
+    private void showApplyDialog(Job job) {
         MyDbManager.getInstance().getUser(user -> {
             if(user==null){
+                this.user=user;
                 Toast.makeText(this, "You need to login to apply", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -105,7 +109,7 @@ public class ActivityJob extends AppCompatActivity {
             MaterialButton apply_BTN_send= dialogView.findViewById(R.id.apply_BTN_send);
             MaterialButton apply_BTN_attachment= dialogView.findViewById(R.id.apply_BTN_attachment);
             if(user.getPdfCV() == null || user.getWordCV() == null){
-                uriCV =user.getPdfCV() == null ? Uri.parse(user.getWordCV()):Uri.parse(user.getPdfCV());
+                uriCV =user.getPdfCV() == null ? user.getWordCV() :user.getPdfCV();
                 apply_BTN_attachment.setVisibility(View.INVISIBLE);
             }
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -140,19 +144,24 @@ public class ActivityJob extends AppCompatActivity {
     }
 
     private void sendEmail(String subject, String description, String email) {
-        try {
-            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-            emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-            if (uriCV != null) {
-                emailIntent.putExtra(Intent.EXTRA_STREAM, uriCV);
+        StorageManager.getInstance().downloadFile(uriCV, uri -> {
+            try {
+                final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                emailIntent.setType("plain/text");
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
+                emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+                emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, description);
+
+                if (uri != null) {
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read permission for the URI
+                }
+                this.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
+                addApplicationToUser();
+            } catch (Throwable t) {
+                Toast.makeText(this, "Request failed try again: "+ t.toString(), Toast.LENGTH_LONG).show();
             }
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, description);
-            this.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
-        } catch (Throwable t) {
-            Toast.makeText(this, "Request failed try again: "+ t.toString(), Toast.LENGTH_LONG).show();
-        }
+        });
     }
 
 
@@ -165,9 +174,28 @@ public class ActivityJob extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this, R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog)
             .setTitle("Choose CV")
             .setMessage("What resume would you like to send?")
-            .setPositiveButton(pdfName, (dialog, which) -> {uriCV=uriPdf; showFileAttached(pdfName,apply_tvAttachment);})
-            .setNegativeButton(wordName, (dialog, which) -> {uriCV=uriWord; showFileAttached(wordName,apply_tvAttachment);})
+            .setPositiveButton(pdfName, (dialog, which) -> {uriCV=user.getPdfCV(); showFileAttached(pdfName,apply_tvAttachment);})
+            .setNegativeButton(wordName, (dialog, which) -> {uriCV=user.getWordCV(); showFileAttached(wordName,apply_tvAttachment);})
             .show();
+    }
+
+    private void addApplicationToUser(){
+        if(job_id!=null){
+            String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Application app=new Application(userUid,job_id,this.getResources().getStringArray(R.array.status_array)[0]);
+            MyDbManager.getInstance().addApplication(userUid,app,()->{
+                //moveToMyApplications();
+            });
+
+        }
+    }
+
+    private void moveToMyApplications(){
+        Intent i = new Intent(getApplicationContext(), ActivityMyApplications.class);
+        Bundle bundle = new Bundle();
+        i.putExtras(bundle);
+        startActivity(i);
+        finish();
     }
 
     private void showFileAttached(String fileName, MaterialTextView apply_tvAttachment) {

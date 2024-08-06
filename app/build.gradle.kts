@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-    implementation ("com.sun.mail:jakarta.mail:2.0.1")
-    implementation ("com.sun.activation:jakarta.activation:2.0.1")
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+
     implementation("com.google.android.material:material:1.9.0")
 }

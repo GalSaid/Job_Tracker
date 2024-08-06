@@ -1,12 +1,15 @@
 package com.example.jobtracker.Utilities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.jobtracker.Model.AppEvent;
 import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.Model.User;
@@ -34,7 +37,6 @@ public class MyDbManager {
     private static volatile MyDbManager instance;
     private final String JOB_TABLE = "Jobs";
     private final String USERS_TABLE = "Users";
-    private final String APPLICATION_TABLE = "Apps";
 
 
     private MyDbManager(Context context) {
@@ -212,18 +214,21 @@ public class MyDbManager {
                 });
     }
 
-    public ArrayList<Job> convertJobsHashMapToArrayList(HashMap<String,Job> hashMap){
+
+
+    public ArrayList<AppEvent> convertEventsHashMapToArrayList(HashMap<String, AppEvent> hashMap){
         return new ArrayList<>(hashMap.values());
-    }
-
-
-    public ArrayList<String> convertAppsHashMapToArrayList(HashMap<String, Integer> hashMap){
-        return new ArrayList<>(hashMap.keySet());
     }
 
     public interface CallBack<T> {
         void res(T res);
     }
+
+    public interface CallBackMove {
+        void res();
+    }
+
+
 
 
 //    public void getUserImage(CallBack<String> callBack) {
@@ -319,62 +324,122 @@ public class MyDbManager {
         });
     }
 
+//    public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        usersRef.child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                User user = snapshot.getValue(User.class);
+//
+//                if (user != null) {
+//                    ArrayList<Application> apps = new ArrayList<>();
+//                    CallBack<Application> callBackApp=new CallBack<Application>() {
+//                        @Override
+//                        public void res(Application res) {
+//                            apps.add(res);
+//                        }
+//                    };
+//                   for(String appId : user.getMyApplications().keySet()){
+//                       getApplication(appId, callBackApp);
+//                   }
+//                    callBack.res(apps);
+//                } else {
+//                    callBack.res(null);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+
+
     public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
+
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
+
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Application> applications = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Application app = snapshot.getValue(Application.class);
+                    applications.add(app);
+                }
+                callBack.res(applications); // Pass the retrieved list to the callback
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Failed to retrieve applications: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void addApplication(String userId, Application app, CallBackMove callBack) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
-        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        usersRef.child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-
-                if (user != null) {
-                    ArrayList<Application> apps = new ArrayList<>();
-                    CallBack<Application> callBackApp=new CallBack<Application>() {
-                        @Override
-                        public void res(Application res) {
-                            apps.add(res);
-                        }
-                    };
-                   for(String appId : user.getMyApplications().keySet()){
-                       getApplication(appId, callBackApp);
-                   }
-                    callBack.res(apps);
-                } else {
-                    callBack.res(null);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        usersRef.child(userId).child("myApplications").child(app.getJobId()).setValue(app)
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to add application",Toast.LENGTH_SHORT).show();
+                }).addOnSuccessListener(unused -> {
+                    callBack.res();
+                });
     }
 
-    public void getApplication(String appId, CallBack<Application> callBack) {
-
+    public void updateApplication(Application app) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference appsRef = database.getReference(APPLICATION_TABLE);
-        appsRef.child(appId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Application app = snapshot.getValue(Application.class);
-
-                if (app != null) {
-                    callBack.res(app);
-                } else {
-                    callBack.res(null);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+        usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app)
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to update application",Toast.LENGTH_SHORT).show();
+                });
     }
+
+    public void addOrUpdateEvent(Application app, AppEvent event){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+        usersRef.child(userUid).child("myApplications").child(app.getJobId()).child("allEvents").child(event.getId()).setValue(event)
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to add event",Toast.LENGTH_SHORT).show();
+                });
+
+    }
+
+
+//    public void getApplication(String appId, CallBack<Application> callBack) {
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference appsRef = database.getReference(APPLICATION_TABLE);
+//        appsRef.child(appId).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Application app = snapshot.getValue(Application.class);
+//
+//                if (app != null) {
+//                    callBack.res(app);
+//                } else {
+//                    callBack.res(null);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     public void getUser(CallBack<User> callBack) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();

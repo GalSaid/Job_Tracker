@@ -5,22 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".Views.ActivityJobBoard">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/job_board_LBL_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/new_jobs"
-        android:textColor="@color/title_color"
-        android:textStyle="bold"
-        android:textSize="54sp"
-        />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_margin="12dp"
-        android:layout_below="@+id/job_board_LBL_title"
+        android:layout_height="match_parent"
         >
 
         <androidx.recyclerview.widget.RecyclerView

@@ -6,29 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jobtracker.Interfaces.EventCallback;
-import com.example.jobtracker.Interfaces.JobCallback;
 import com.example.jobtracker.Model.AppEvent;
-import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.R;
-import com.example.jobtracker.Utilities.ImageLoader;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AppEventAdapter extends RecyclerView.Adapter<AppEventAdapter.PlayerViewHolder> {
 
-    private HashMap<String, AppEvent> appEvents;
+    private ArrayList<AppEvent> appEvents;
     private EventCallback eventCallback;
 
 
-    public AppEventAdapter(HashMap<String, AppEvent> appEvents) {
+    public AppEventAdapter(ArrayList<AppEvent> appEvents) {
         this.appEvents = appEvents;
     }
 
@@ -49,7 +43,7 @@ public class AppEventAdapter extends RecyclerView.Adapter<AppEventAdapter.Player
         AppEvent event = getItem(position);
         holder.event_LBL_description.setText(event.getDescription());
         holder.event_LBL_title.setText(event.getTitle());
-        holder.event_LBL_date.setText(String.valueOf(event.getDate().format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"))));
+        holder.event_LBL_date.setText(event.getDate());
     }
 
     @Override

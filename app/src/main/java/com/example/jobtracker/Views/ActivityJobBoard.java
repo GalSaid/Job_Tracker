@@ -2,6 +2,7 @@ package com.example.jobtracker.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +52,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
             Intent i = new Intent(getApplicationContext(), ActivityJob.class);
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.job_id), job.getId());
+            Log.d("Gal", " get job id: "+job.getId());
             i.putExtras(bundle);
             startActivity(i);
             //finish();

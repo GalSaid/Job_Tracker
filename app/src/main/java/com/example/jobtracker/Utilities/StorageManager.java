@@ -6,10 +6,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,11 +19,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class StorageManager {
     private static Context context;
@@ -129,4 +143,47 @@ public class StorageManager {
         return result;
     }
 
+
+    public interface FileDownloadCallback {
+        void onSuccess(Uri fileUri);
+    }
+
+    public void downloadFile(String fileUrl, FileDownloadCallback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(fileUrl).build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    File file = new File(context.getExternalFilesDir(null), getFileName(Uri.parse(fileUrl)));
+                    try (InputStream inputStream = response.body().byteStream();
+                         OutputStream outputStream = new FileOutputStream(file)) {
+
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+
+                        if (callback != null) {
+                            Uri fileUri = FileProvider.getUriForFile(context, "com.example.jobtracker.fileprovider", file);
+                            callback.onSuccess(fileUri);
+                        }
+                    }
+                } else {
+                    if (callback != null) {
+                        Toast.makeText(context, "Failed to download the file", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
 }
+
+

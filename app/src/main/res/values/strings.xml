@@ -24,4 +24,8 @@
     <string name="job_id">Job Id</string>
     <string name="full_time">Full Time</string>
     <string name="part_time">Part Time</string>
+    <string name="add_new_event">Add New Event</string>
+    <string name="add">Add</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="edit">Edit</string>
 </resources>

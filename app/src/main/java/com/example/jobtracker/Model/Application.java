@@ -1,9 +1,16 @@
 package com.example.jobtracker.Model;
 
+
+import android.content.res.Resources;
+
+import com.example.jobtracker.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Application {
-    private String title;
     private boolean returned;
     private String status;
     private String userId;
@@ -14,12 +21,12 @@ public class Application {
     public Application() {
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public Application(String userId, String jobId, String status) {
+        this.userId = userId;
+        this.jobId = jobId;
+        this.date=new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        this.returned = false;
+        this.status = status;
     }
 
     public String getStatus() {
@@ -69,4 +76,5 @@ public class Application {
     public void setAllEvents(HashMap<String, AppEvent> allEvents) {
         this.allEvents = allEvents;
     }
+
 }
