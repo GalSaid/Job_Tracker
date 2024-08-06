@@ -1,5 +1,7 @@
 package com.example.jobtracker.Utilities;
 
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.jobtracker.Views.ActivityRegister;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -17,9 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageManager {
     private static Context context;
@@ -54,39 +56,53 @@ public class StorageManager {
 
     public void uploadPdfCVToFB(Uri data){
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
-        reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        MyDbManager.getInstance().getPdfCVName(filename->{
+           String pdfFileName=filename;
+            StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
+            reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> uriTask= taskSnapshot.getStorage().getDownloadUrl();
                     while(!uriTask.isComplete());
                     Uri uri= uriTask.getResult();
                     databaseReference.child(userUid).child("pdfCV").setValue(uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "Failed to upload pdf file to storage",Toast.LENGTH_SHORT).show();
-            }
+                    if(pdfFileName!=null){
+                        StorageReference ref= storageReference.child(userUid+"/"+pdfFileName);
+                        ref.delete();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, "Failed to upload pdf file to storage",Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
     public void uploadWordCVToFB(Uri data){
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
-        reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask= taskSnapshot.getStorage().getDownloadUrl();
-                while(!uriTask.isComplete());
-                Uri uri= uriTask.getResult();
-                databaseReference.child(userUid).child("wordCV").setValue(uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "Failed to upload word file to storage",Toast.LENGTH_SHORT).show();
-            }
+        MyDbManager.getInstance().getWordCVName(filename->{
+            String wordFileName=filename;
+            StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
+            reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask= taskSnapshot.getStorage().getDownloadUrl();
+                    while(!uriTask.isComplete());
+                    Uri uri= uriTask.getResult();
+                    databaseReference.child(userUid).child("wordCV").setValue(uri.toString());
+                    if(wordFileName!=null){
+                        StorageReference ref= storageReference.child(userUid+"/"+wordFileName);
+                        ref.delete();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(context, "Failed to upload word file to storage",Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 

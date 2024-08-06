@@ -41,8 +41,8 @@ public class ActivityRegister extends AppCompatActivity {
     private MaterialButton register_BTN_register;
     private MaterialButton btn_pdf;
     private MaterialButton btn_word;
-    private Uri uri_pdf;
-    private Uri uri_word;
+    private Uri uri_pdf=null;
+    private Uri uri_word=null;
     private ProgressBar progress_bar;
     private FirebaseAuth mAuth;
 

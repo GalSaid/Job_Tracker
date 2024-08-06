@@ -1,145 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/scrollView"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Views.ActivityProfile">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginBottom="22dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-           android:layout_marginEnd="12dp"
-            android:gravity="center"
-            android:text="Profile Info"
-            android:textColor="#969BA0"
-            android:textSize="32sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profile_IMAGEVIEW_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_edit_user"
-
-            />
-
-    </LinearLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/profile_layout_EDT_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            app:placeholderText="Enter your name"
-            android:hint="Full Name"
-            app:errorEnabled="true">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/profile_EDT_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="22dp"
+                android:orientation="horizontal"
+                android:padding="12dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/profile_layout_EDT_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            android:hint="Phone Number"
-            app:errorEnabled="true">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Profile Info"
+                    android:textColor="#969BA0"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/profile_EDT_phone"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_IMAGEVIEW_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_edit_user"
+
+                    />
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profile_layout_EDT_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="32dp"
+                android:hint="Full Name"
+                app:errorEnabled="true"
+                app:placeholderText="Enter your name">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profile_EDT_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/profile_layout_EDT_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            app:placeholderText="Enter description about you"
-            android:hint="description"
-            app:errorEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/profile_EDT_description"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profile_layout_EDT_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="32dp"
+                android:hint="Phone Number"
+                app:errorEnabled="true">
 
-    <com.google.android.material.textview.MaterialTextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profile_EDT_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profile_layout_EDT_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:hint="description"
+                app:errorEnabled="true"
+                app:placeholderText="Enter description about yourself">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profile_EDT_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="22dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/profile_LAYOT_word"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profile_IMG_word"
+                        android:layout_width="@dimen/img_dimens"
+                        android:layout_height="@dimen/img_dimens"
+                        android:maxLines="2"
+                        app:srcCompat="@drawable/ic_doc" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/profile_LBL_wordName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="#969BA0"
+                        android:textSize="@dimen/data_text_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/profile_LAYOT_pdf"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profile_IMG_pdf"
+                        android:layout_width="@dimen/img_dimens"
+                        android:layout_height="@dimen/img_dimens"
+                        app:srcCompat="@drawable/ic_pdf" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/profile_LBL_pdfName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="#969BA0"
+                        android:textSize="@dimen/data_text_size"
+                        android:maxLines="2"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/profile_BTN_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="20dp"
+                android:text="Update" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/profile_progress_bar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:text="PDF CV"
-        android:textColor="#969BA0"
-        android:textStyle="bold"
-        android:textSize="@dimen/data_text_size"
-        />
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/profile_layout_EDT_pdfCV"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="32dp"-->
-<!--        app:errorEnabled="true">-->
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/profile_EDT_pdfCV"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:text="WORD CV"
-        android:textStyle="bold"
-        android:textColor="#969BA0"
-        android:textSize="@dimen/data_text_size"
-        />
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/profile_layout_EDT_wordCV"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="32dp"-->
-
-<!--        app:errorEnabled="true">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/profile_EDT_wordCV"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/profile_BTN_update"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            android:text="Update"/>
-</LinearLayout>
+</RelativeLayout>
 
 

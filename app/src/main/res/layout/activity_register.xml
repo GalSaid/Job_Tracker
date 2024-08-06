@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Views.ActivityRegister">
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -81,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            app:placeholderText="Enter description about you"
+            app:placeholderText="Enter description about yourself"
             android:hint="description"
             app:errorEnabled="true">
 

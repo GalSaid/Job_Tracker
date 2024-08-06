@@ -1,18 +1,33 @@
 package com.example.jobtracker.Views;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+
+import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
 import com.example.jobtracker.Utilities.DrawerBaseActivity;
+import com.example.jobtracker.Utilities.MyDbManager;
+import com.example.jobtracker.Utilities.StorageManager;
 import com.example.jobtracker.databinding.ActivityProfileBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityProfile extends DrawerBaseActivity {
 
@@ -27,7 +42,15 @@ public class ActivityProfile extends DrawerBaseActivity {
     private TextInputLayout profile_layout_EDT_description;
     private MaterialButton profile_BTN_update;
     private ShapeableImageView profile_IMAGEVIEW_edit;
-
+    private LinearLayout profile_LAYOT_pdf;
+    private LinearLayout profile_LAYOT_word;
+    private MaterialTextView profile_LBL_wordName;
+    private MaterialTextView profile_LBL_pdfName;
+    private Uri uri_pdf=null;
+    private Uri uri_word=null;
+    private ProgressBar profile_progress_bar;
+    private ShapeableImageView profile_IMG_pdf;
+    private ShapeableImageView profile_IMG_word;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +72,36 @@ public class ActivityProfile extends DrawerBaseActivity {
         profile_layout_EDT_description = findViewById(R.id.profile_layout_EDT_description);
         profile_BTN_update = findViewById(R.id.profile_BTN_update);
         profile_IMAGEVIEW_edit=findViewById(R.id.profile_IMAGEVIEW_edit);
+        profile_LAYOT_word=findViewById(R.id.profile_LAYOT_word);
+        profile_LAYOT_pdf=findViewById(R.id.profile_LAYOT_pdf);
+        profile_LBL_wordName=findViewById(R.id.profile_LBL_wordName);
+        profile_LBL_pdfName=findViewById(R.id.profile_LBL_pdfName);
+        profile_progress_bar=findViewById(R.id.profile_progress_bar);
+        profile_IMG_pdf=findViewById(R.id.profile_IMG_pdf);
+        profile_IMG_word=findViewById(R.id.profile_IMG_word);
     }
 
     private void initViews() {
-        profile_BTN_update.setVisibility(View.INVISIBLE);
-        profile_EDT_name.setEnabled(false);
-        profile_EDT_phone.setEnabled(false);
-        profile_EDT_description.setEnabled(false);
+        MyDbManager.getInstance().getUser(user->{
+            profile_EDT_name.setText(user.getName());
+            profile_EDT_phone.setText(user.getPhoneNumber());
+            profile_EDT_description.setText(user.getDescription());
+            if(user.getPdfCV()!=null)
+                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(user.getPdfCV())));
+            else
+                profile_LAYOT_pdf.setVisibility(View.GONE);
+            if(user.getWordCV()!=null)
+                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(user.getWordCV())));
+            else
+                profile_LAYOT_word.setVisibility(View.GONE);
+        });
+        noEditMode();
         profile_IMAGEVIEW_edit.setOnClickListener(v -> {
           moveToEditMode();
         });
-
+        profile_BTN_update.setOnClickListener(v -> {
+            updateProfile();
+        });
     }
 
     private void moveToEditMode(){
@@ -67,11 +109,122 @@ public class ActivityProfile extends DrawerBaseActivity {
         profile_EDT_name.setEnabled(true);
         profile_EDT_phone.setEnabled(true);
         profile_EDT_description.setEnabled(true);
-        profile_BTN_update.setOnClickListener(v -> {
-            updateProfile();
+        profile_LAYOT_pdf.setFocusable(true);
+        profile_LAYOT_pdf.setFocusableInTouchMode(true);
+        profile_LAYOT_word.setFocusable(true);
+        profile_LAYOT_word.setFocusableInTouchMode(true);
+        profile_LAYOT_pdf.setClickable(true);
+        profile_LAYOT_word.setClickable(true);
+        profile_LAYOT_pdf.setOnClickListener(v -> {
+            uploadPdfCV();
+        });
+        profile_LAYOT_word.setOnClickListener(v -> {
+            uploadWordCV();
         });
     }
 
-    private void updateProfile() {}
+    private void updateProfile() {
+        noEditMode();
+
+        profile_layout_EDT_name.setError(null);
+        profile_layout_EDT_phone.setError(null);
+        profile_layout_EDT_description.setError(null);
+
+
+        boolean valid=true;
+        String name=profile_EDT_name.getText().toString();
+        String phone=profile_EDT_phone.getText().toString().trim();
+        String description=profile_EDT_description.getText().toString().trim();
+        if(name.isEmpty()){
+            profile_layout_EDT_name.setError("Please enter full name");
+            profile_layout_EDT_name.requestFocus();
+            valid=false;
+        }
+        if(phone.isEmpty()){
+            profile_layout_EDT_phone.setError("Please enter phone");
+            profile_layout_EDT_phone.requestFocus();
+            valid=false;
+        }
+        if(description.isEmpty()){
+            profile_layout_EDT_description.setError("Please enter description about yourself");
+            profile_layout_EDT_description.requestFocus();
+            valid=false;
+        }
+        if(valid){
+            profile_progress_bar.setVisibility(View.VISIBLE);
+            MyDbManager.getInstance().getUser(user->{
+                user.setName(name);
+                user.setPhoneNumber(phone);
+                user.setDescription(description);
+                if(uri_pdf!=null){
+                    StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
+                }
+                if(uri_word!=null){
+                    StorageManager.getInstance().uploadWordCVToFB(uri_word);
+                }
+                FirebaseDatabase.getInstance().getReference("Users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(ActivityProfile.this, "Successfully updated",Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(ActivityProfile.this, "User failed to register",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                profile_progress_bar.setVisibility(View.GONE);
+            });
+        }
+    }
+    private ActivityResultLauncher<Intent> launcherPdf=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if(result.getResultCode()==RESULT_OK && result.getData()!=null){
+            Intent data=result.getData();
+            if(data!=null && data.getData()!=null){
+                uri_pdf=data.getData();
+                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(uri_pdf));
+            }
+        }
+    });
+
+    private ActivityResultLauncher<Intent> launcherWord= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if(result.getResultCode()==RESULT_OK && result.getData()!=null){
+            Intent data=result.getData();
+            if(data!=null && data.getData()!=null){
+                uri_word=data.getData();
+                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(uri_word));
+            }
+        }
+    });
+
+    private void uploadWordCV(){
+        Intent intent = new Intent();
+        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcherWord.launch(Intent.createChooser(intent, "Select WORD"));
+    }
+
+
+    private void uploadPdfCV(){
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcherPdf.launch(Intent.createChooser(intent, "Select PDF"));
+    }
+
+    private void noEditMode(){
+        profile_BTN_update.setVisibility(View.INVISIBLE);
+        profile_EDT_name.setEnabled(false);
+        profile_EDT_phone.setEnabled(false);
+        profile_EDT_description.setEnabled(false);
+        profile_LAYOT_pdf.setClickable(false);
+        profile_LAYOT_pdf.setFocusable(false);
+        profile_LAYOT_pdf.setFocusableInTouchMode(false);
+        profile_LAYOT_word.setClickable(false);
+        profile_LAYOT_word.setFocusable(false);
+        profile_LAYOT_word.setFocusableInTouchMode(false);
+    }
 
 }
