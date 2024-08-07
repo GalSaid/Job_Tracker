@@ -1,7 +1,5 @@
 package com.example.jobtracker.Model;
 
-import java.time.LocalDate;
-
 public class Job{
     private String id;
     private String name;

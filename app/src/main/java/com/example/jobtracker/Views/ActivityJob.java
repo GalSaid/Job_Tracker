@@ -156,12 +156,19 @@ public class ActivityJob extends AppCompatActivity {
                     emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
                     emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Grant read permission for the URI
                 }
-                this.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
-                addApplicationToUser();
+                this.startActivityForResult(Intent.createChooser(emailIntent, "Sending email..."),1);
             } catch (Throwable t) {
                 Toast.makeText(this, "Request failed try again: "+ t.toString(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            addApplicationToUser();
+        }
     }
 
 
@@ -184,7 +191,7 @@ public class ActivityJob extends AppCompatActivity {
             String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             Application app=new Application(userUid,job_id,this.getResources().getStringArray(R.array.status_array)[0]);
             MyDbManager.getInstance().addApplication(userUid,app,()->{
-                //moveToMyApplications();
+                moveToMyApplications();
             });
 
         }

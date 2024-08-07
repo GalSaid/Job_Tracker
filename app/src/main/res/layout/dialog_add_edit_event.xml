@@ -28,6 +28,7 @@
             android:id="@+id/event_EDT_title_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,9 +42,8 @@
             android:id="@+id/event_EDT_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="3"
             android:maxLines="7"
-            android:inputType="text"
+            android:inputType="textMultiLine"
         />
     </com.google.android.material.textfield.TextInputLayout>
 

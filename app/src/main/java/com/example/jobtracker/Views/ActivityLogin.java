@@ -73,7 +73,7 @@ public class ActivityLogin extends AppCompatActivity {
                 layout_login_EDT_email.requestFocus();
                 valid=false;
             }
-            if(password.length() < 6){
+            if(password.isEmpty()){
                 layout_login_EDT_password.setError("Please enter password");
                 layout_login_EDT_password.requestFocus();
                 valid=false;

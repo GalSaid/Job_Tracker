@@ -1,9 +1,12 @@
 package com.example.jobtracker.Views;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,12 +26,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ActivityMyApplications extends DrawerBaseActivity {
     private RecyclerView list_LST_applications;
     private ActivityApplicationsBinding activityApplicationsBinding;
     private  ApplicationAdapter appAdapter;
-
+    private TextInputEditText event_EDT_date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,23 +56,31 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         list_LST_applications.setLayoutManager(linearLayoutManager);
         list_LST_applications.setAdapter(appAdapter);
-        appAdapter.setApplicationCallback((app, position) -> {
-            //open new event
-            openNewEvent(app);
-        });
+        //open new event
+        appAdapter.setApplicationCallback(this::openEvent);
     }
     private void findViews() {
         list_LST_applications = findViewById(R.id.application_recyclerview);
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (appAdapter != null)
+//            appAdapter.notifyDataSetChanged();
+//    }
+
+
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (appAdapter != null)
-            appAdapter.notifyDataSetChanged();
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("Gal","destroy");
+
     }
 
-    private void openNewEvent(Application app) {
+    private void openEvent(Application app, AppEvent event) {
+        Log.d("Gal","entet to open event");
+
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_event, null);
         MaterialTextView event_LBL_title= dialogView.findViewById(R.id.event_LBL_title);
         TextInputLayout event_layout_EDT_title_description= dialogView.findViewById(R.id.event_layout_EDT_title_description);
@@ -76,11 +88,25 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         TextInputLayout event_layout_EDT_description= dialogView.findViewById(R.id.event_layout_EDT_description);
         TextInputEditText event_EDT_description= dialogView.findViewById(R.id.event_EDT_description);
         TextInputLayout event_layout_EDT_date= dialogView.findViewById(R.id.event_layout_EDT_date);
-        TextInputEditText event_EDT_date= dialogView.findViewById(R.id.event_EDT_date);
+        event_EDT_date= dialogView.findViewById(R.id.event_EDT_date);
         MaterialButton event_BTN_save= dialogView.findViewById(R.id.event_BTN_save);
 
-        event_LBL_title.setText(R.string.add_new_event);
-        event_BTN_save.setText(R.string.add);
+        event_EDT_date.setOnClickListener(v -> {
+                showDatePickerDialog();
+        });
+
+        if(event== null){ //add new event
+            event_LBL_title.setText(R.string.add_new_event);
+            event_BTN_save.setText(R.string.add);
+        }
+        else{ //edit event
+            Log.d("Gal","event  here is not null");
+            event_LBL_title.setText(R.string.edit_event);
+            event_BTN_save.setText(R.string.edit);
+            event_EDT_title_description.setText(event.getTitle());
+            event_EDT_description.setText(event.getDescription());
+            event_EDT_date.setText(event.getDate());
+        }
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
@@ -111,8 +137,16 @@ public class ActivityMyApplications extends DrawerBaseActivity {
                 valid=false;
             }
             if(valid){
-                //save the event
-                addNewEvent(app, title,description,date);
+                if(event==null)
+                    //save the event
+                    addNewEvent(app, title,description,date);
+                else{
+                    //edit the event
+                    event.setDate(date);
+                    event.setDescription(description);
+                    event.setTitle(title);
+                    MyDbManager.getInstance().addOrUpdateEvent(app, event);
+                }
                 // Dismiss the dialog
                 dialog.dismiss();
             }
@@ -125,5 +159,17 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         AppEvent newEvent = new AppEvent(date,description,title);
         MyDbManager.getInstance().addOrUpdateEvent(app, newEvent);
     }
+
+    private void showDatePickerDialog(){
+            Calendar c = Calendar.getInstance();
+            new DatePickerDialog(this, this::setDate, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void setDate(DatePicker view, int year, int month, int dayOfMonth) {
+        String selectedDate = String.format("%02d/%02d/%d", dayOfMonth, month + 1, year);
+        event_EDT_date.setText(selectedDate);
+    }
+
+
 
 }

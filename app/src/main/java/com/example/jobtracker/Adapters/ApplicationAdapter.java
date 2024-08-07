@@ -2,7 +2,9 @@ package com.example.jobtracker.Adapters;
 
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jobtracker.Interfaces.ApplicationCallback;
+import com.example.jobtracker.Interfaces.EventCallback;
 import com.example.jobtracker.Model.AppEvent;
 import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.R;
@@ -28,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.AppViewHolder> {
 
@@ -50,6 +54,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         this.appCallback = appCallback;
     }
 
+
     @NonNull
     @Override
     public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,79 +63,19 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         return new AppViewHolder(view);
     }
 
-    private void openEditEvent(Context context, AppEvent event, Application app) {
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_edit_event, null);
-        MaterialTextView event_LBL_title= dialogView.findViewById(R.id.event_LBL_title);
-        TextInputLayout event_layout_EDT_title_description= dialogView.findViewById(R.id.event_layout_EDT_title_description);
-        TextInputEditText event_EDT_title_description= dialogView.findViewById(R.id.event_EDT_title_description);
-        TextInputLayout event_layout_EDT_description= dialogView.findViewById(R.id.event_layout_EDT_description);
-        TextInputEditText event_EDT_description= dialogView.findViewById(R.id.event_EDT_description);
-        TextInputLayout event_layout_EDT_date= dialogView.findViewById(R.id.event_layout_EDT_date);
-        TextInputEditText event_EDT_date= dialogView.findViewById(R.id.event_EDT_date);
-        MaterialButton event_BTN_save= dialogView.findViewById(R.id.event_BTN_save);
-
-        event_LBL_title.setText(R.string.edit_event);
-        event_BTN_save.setText(R.string.edit);
-        event_EDT_title_description.setText(event.getTitle());
-        event_EDT_description.setText(event.getDescription());
-        event_EDT_date.setText(event.getDate());
-
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(dialogView)
-                .create();
-
-        event_BTN_save.setOnClickListener(v -> {
-            event_layout_EDT_title_description.setError(null);
-            event_layout_EDT_description.setError(null);
-            event_layout_EDT_date.setError(null);
-            String title = event_EDT_title_description.getText().toString().trim();
-            String description = event_EDT_description.getText().toString().trim();
-            String date = event_EDT_date.getText().toString().trim();
-
-            boolean valid=true;
-            if(title.isEmpty()){
-                event_layout_EDT_title_description.setError("Please enter event title");
-                event_layout_EDT_title_description.requestFocus();
-                valid=false;
-            }
-            if(description.isEmpty()){
-                event_layout_EDT_description.setError("Please enter description event");
-                event_layout_EDT_description.requestFocus();
-                valid=false;
-            }
-            if(date.isEmpty()){
-                event_layout_EDT_date.setError("Please enter date event");
-                event_layout_EDT_date.requestFocus();
-                valid=false;
-            }
-            if(valid){
-                //edit the event
-                event.setDate(date);
-                event.setDescription(description);
-                event.setTitle(title);
-                MyDbManager.getInstance().addOrUpdateEvent(app, event);
-                // Dismiss the dialog
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     @Override
     public void onBindViewHolder(@NonNull AppViewHolder holder, int position) {
+        Log.d("GGG", "onBindViewHolder: " + position);
         Application app = getItem(position);
         MyDbManager.getInstance().getSpecificJob(app.getJobId(), job -> {
             holder.application_LBL_title.setText(job.getName());
             holder.application_LBL_location.setText(job.getLocation());
         });
         holder.application_LBL_date.setText(app.getDate());
-        if (app.isReturned())
-            holder.application_CHECKBOX_returned.setChecked(true);
-        else
-            holder.application_CHECKBOX_returned.setChecked(false);
+        holder.application_CHECKBOX_returned.setChecked(app.isReturned());
         String status = app.getStatus();
         holder.application_SPINNER_status.setSelection(((ArrayAdapter<CharSequence>) holder.application_SPINNER_status.getAdapter()).getPosition(status));
+
 
         // Create a layout manager
         // to assign a layout
@@ -165,8 +110,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 = new AppEventAdapter(
                 MyDbManager.getInstance().convertEventsHashMapToArrayList(app.getAllEvents()));
         childItemAdapter.setAppEventCallback((event, pos) -> {
-            openEditEvent(holder.itemView.getContext(), event, app);
-                }
+            appCallback.addEvent(app,event);
+        }
         );
         holder
                 .ChildRecyclerView
@@ -223,8 +168,10 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     // Update application status
                     int pos = getAdapterPosition();
                     Application app = getItem(pos);
-                    app.setStatus(selectedStatus);
-                    MyDbManager.getInstance().updateApplication(app);
+                    if (!app.getStatus().equals(selectedStatus)) {
+                        app.setStatus(selectedStatus);
+                        MyDbManager.getInstance().updateApplication(app);
+                    }
                 }
 
                 @Override
@@ -232,15 +179,10 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
                 }
             });
-            application_CHECKBOX_returned.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int position = getAdapterPosition();
-                    Application app = getItem(position);
-                    app.setReturned(isChecked);
-                    //notifyItemChanged(position);
-                    MyDbManager.getInstance().updateApplication(app);
-                }
+            application_CHECKBOX_returned.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int pos = getAdapterPosition();
+                Application app = getItem(pos);
+                MyDbManager.getInstance().updateApplication(app);
             });
             ChildRecyclerView
                     = itemView
@@ -248,7 +190,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                             R.id.list_LST_events);
             application_IMAGEVIEW_plus.setOnClickListener(v -> { //Show all the details of the job
                 if (appCallback != null) {
-                    appCallback.addEvent(getItem(getAdapterPosition()), getAdapterPosition());
+                    appCallback.addEvent(getItem(getAdapterPosition()),null);
                 }
             });
         }

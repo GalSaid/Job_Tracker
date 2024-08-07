@@ -30,7 +30,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         activityJobBoardBinding=ActivityJobBoardBinding.inflate(getLayoutInflater());
         setContentView(activityJobBoardBinding.getRoot());
         allocateActivityTitle("All Jobs");
-        MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard
+        //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard
         findViews();
         initViews();
     }
@@ -52,7 +52,6 @@ public class ActivityJobBoard extends DrawerBaseActivity {
             Intent i = new Intent(getApplicationContext(), ActivityJob.class);
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.job_id), job.getId());
-            Log.d("Gal", " get job id: "+job.getId());
             i.putExtras(bundle);
             startActivity(i);
             //finish();

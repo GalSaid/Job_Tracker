@@ -43,7 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:layout_gravity="bottom"
+            android:layout_marginTop="3dp"
+            android:layout_gravity="top"
             android:src="@drawable/ic_plus"
 
             />
@@ -95,17 +96,17 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="12dp"
         android:orientation="horizontal">
 
         <!--Child RecyclerView-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_LST_events"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/event_item"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/event_item" />
 
     </LinearLayout>
 </LinearLayout> 

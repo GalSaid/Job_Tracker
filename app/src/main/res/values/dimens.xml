@@ -2,6 +2,7 @@
 <resources>
     <dimen name="poster_width">160dp</dimen>
     <dimen name="poster_height">160dp</dimen>
+    <dimen name="app_height">250dp</dimen>
     <dimen name="description_width">260dp</dimen>
     <dimen name="description_height">160dp</dimen>
     <dimen name="poster_vertical_margin">5dp</dimen>

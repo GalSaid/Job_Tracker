@@ -13,6 +13,7 @@ import com.example.jobtracker.Model.AppEvent;
 import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.Model.User;
+import com.example.jobtracker.R;
 import com.example.jobtracker.Views.ActivityRegister;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -58,7 +59,7 @@ public class MyDbManager {
         }
     }
 
-    public HashMap<String,Job> createJobsAndLoadToDB(){
+    public void createJobsAndLoadToDB(){
         HashMap<String,Job> jobs = new HashMap<>();
         jobs.put("j1",new Job(
                 "Software Developer",
@@ -199,7 +200,6 @@ public class MyDbManager {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference jobsRef = database.getReference(JOB_TABLE);
         jobsRef.setValue(jobs);
-        return jobs;
     }
 
     public void updateJobCompanyImage(String jobId,String imageUrl, CallBack callBack) {
@@ -316,7 +316,8 @@ public class MyDbManager {
                     ArrayList<Job> jobs = new ArrayList<>();
                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
                         Job job = snapshot.getValue(Job.class);
-                        jobs.add(job);
+                        if(job!=null && job.isActive())
+                            jobs.add(job);
                     }
                     callBack.res(jobs);
                 }
@@ -481,6 +482,24 @@ public class MyDbManager {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    public void getJobStatus(String jobId, CallBack<Boolean> callBack) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference jobsRef = database.getReference(JOB_TABLE).child(jobId);
+
+        jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean active = snapshot.child("active").getValue(boolean.class);
+                callBack.res(active);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "There is no job "+jobId,Toast.LENGTH_SHORT).show();
             }
         });
     }

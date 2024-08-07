@@ -24,7 +24,7 @@ public class Application {
     public Application(String userId, String jobId, String status) {
         this.userId = userId;
         this.jobId = jobId;
-        this.date=new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        this.date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(new Date());
         this.returned = false;
         this.status = status;
     }

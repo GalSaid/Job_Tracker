@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class AppEvent {
+    public static final int MAX_LINES_COLLAPSED = 2;
+    public static final int MIN_LINES_COLLAPSED = 1;
     private String id;
     private String title;
     private String description;
     private String date; //The date of the event
+    private boolean isCollapsed = true; //for the animation
 
     public AppEvent() {
     }
@@ -50,5 +53,13 @@ public class AppEvent {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isCollapsed() {
+        return isCollapsed;
+    }
+
+    public void setCollapsed(boolean collapsed) {
+        isCollapsed = collapsed;
     }
 }
