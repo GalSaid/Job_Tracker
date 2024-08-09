@@ -397,14 +397,22 @@ public class MyDbManager {
                 });
     }
 
-    public void updateApplication(Application app) {
+    public void updateApplication(Application app, OnAppUpdateListener listener) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
-        usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app)
+        usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app).addOnSuccessListener(
+                unused -> {
+                    listener.onSuccess();
+                }
+                )
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to update application",Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    public interface OnAppUpdateListener {
+        void onSuccess();
     }
 
     public void addOrUpdateEvent(Application app, AppEvent event){

@@ -27,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.regex.Pattern;
+
 public class ActivityRegister extends AppCompatActivity {
     private TextInputEditText register_EDT_name;
     private TextInputEditText register_EDT_email;
@@ -151,8 +153,9 @@ public class ActivityRegister extends AppCompatActivity {
             layout_EDT_description.requestFocus();
             valid=false;
         }
-        if(password.length() < 6){
-            layout_EDT_password.setError("Please enter password with at least 6 characters");
+        String check=checkPassword(password);
+        if(check!=null){
+            layout_EDT_password.setError(check);
             layout_EDT_password.requestFocus();
             valid=false;
         }
@@ -200,4 +203,29 @@ public class ActivityRegister extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
+    private String checkPassword(String password) {
+        if (password.length() < 8) {
+            return "Password must be at least 8 characters long";
+        }
+        Pattern upperCasePattern = Pattern.compile("[A-Z]");
+        Pattern lowerCasePattern = Pattern.compile("[a-z]");
+        Pattern digitPattern = Pattern.compile("[0-9]");
+        Pattern specialCharPattern = Pattern.compile("[^a-zA-Z0-9]");
+
+        if (!upperCasePattern.matcher(password).find()) {
+            return "Password must contain at least one uppercase letter";
+        }
+        if (!lowerCasePattern.matcher(password).find()) {
+            return "Password must contain at least one lowercase letter";
+        }
+        if (!digitPattern.matcher(password).find()) {
+            return "Password must contain at least one digit";
+        }
+        if (!specialCharPattern.matcher(password).find()) {
+            return "Password must contain at least one special character";
+        }
+        return null;
+    }
+
 }

@@ -45,9 +45,20 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             = new RecyclerView
             .RecycledViewPool();
     private ApplicationCallback appCallback;
+    private Context context;
+    private ArrayAdapter<CharSequence> statusAdapter;
 
-    public ApplicationAdapter(ArrayList<Application> apps) {
+
+    public ApplicationAdapter(ArrayList<Application> apps, Context context) {
         this.apps = apps;
+        this.context=context;
+        statusAdapter  = ArrayAdapter.createFromResource(
+               context,
+                R.array.status_array,
+                android.R.layout.simple_spinner_item
+        );
+        // Specify the layout to use when the list of choices appears.
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
     public void setApplicationCallback(ApplicationCallback appCallback) {
@@ -65,7 +76,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AppViewHolder holder, int position) {
-        Log.d("GGG", "onBindViewHolder: " + position);
+        Log.d("Gali", "onBindViewHolder: " + position);
         Application app = getItem(position);
         MyDbManager.getInstance().getSpecificJob(app.getJobId(), job -> {
             holder.application_LBL_title.setText(job.getName());
@@ -73,9 +84,12 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         });
         holder.application_LBL_date.setText(app.getDate());
         holder.application_CHECKBOX_returned.setChecked(app.isReturned());
-        String status = app.getStatus();
-        holder.application_SPINNER_status.setSelection(((ArrayAdapter<CharSequence>) holder.application_SPINNER_status.getAdapter()).getPosition(status));
 
+        // Apply the adapter to the spinner.
+        holder.application_SPINNER_status.setAdapter(statusAdapter);
+        String status = app.getStatus();
+       // holder.application_SPINNER_status.setOnItemSelectedListener(null);
+        holder.application_SPINNER_status.setSelection(statusAdapter.getPosition(status));
 
         // Create a layout manager
         // to assign a layout
@@ -110,7 +124,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 = new AppEventAdapter(
                 MyDbManager.getInstance().convertEventsHashMapToArrayList(app.getAllEvents()));
         childItemAdapter.setAppEventCallback((event, pos) -> {
-            appCallback.addEvent(app,event);
+            appCallback.addEvent(app,pos,event);
         }
         );
         holder
@@ -152,15 +166,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             application_LBL_location = itemView.findViewById(R.id.application_LBL_location);
             application_LBL_date = itemView.findViewById(R.id.application_LBL_date);
             application_SPINNER_status = itemView.findViewById(R.id.application_SPINNER_status);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                    itemView.getContext(),
-                    R.array.status_array,
-                    android.R.layout.simple_spinner_item
-            );
-            // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner.
-            application_SPINNER_status.setAdapter(adapter);
+
             application_SPINNER_status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -170,7 +176,12 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     Application app = getItem(pos);
                     if (!app.getStatus().equals(selectedStatus)) {
                         app.setStatus(selectedStatus);
-                        MyDbManager.getInstance().updateApplication(app);
+                        Log.d("Gali","here1");
+                        MyDbManager.getInstance().updateApplication(app,()->{
+                            notifyItemChanged(pos);
+                            Log.d("Gali","here2");
+
+                        });
                     }
                 }
 
@@ -180,9 +191,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 }
             });
             application_CHECKBOX_returned.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                int pos = getAdapterPosition();
-                Application app = getItem(pos);
-                MyDbManager.getInstance().updateApplication(app);
+               appCallback.updateReturnStatus(isChecked,getItem(getAdapterPosition()),getAdapterPosition());
             });
             ChildRecyclerView
                     = itemView
@@ -190,7 +199,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                             R.id.list_LST_events);
             application_IMAGEVIEW_plus.setOnClickListener(v -> { //Show all the details of the job
                 if (appCallback != null) {
-                    appCallback.addEvent(getItem(getAdapterPosition()),null);
+                    appCallback.addEvent(getItem(getAdapterPosition()),getAdapterPosition(),null);
                 }
             });
         }

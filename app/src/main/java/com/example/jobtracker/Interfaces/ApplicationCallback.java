@@ -6,5 +6,7 @@ import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 
 public interface ApplicationCallback {
-    void addEvent(Application app, AppEvent event);
+    void addEvent(Application app, int position, AppEvent even);
+    void updateReturnStatus(boolean isChecked,Application app,int position);
+
 }

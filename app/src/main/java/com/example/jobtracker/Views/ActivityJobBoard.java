@@ -21,6 +21,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
     private ActivityJobBoardBinding activityJobBoardBinding;
     private RecyclerView list_LST_jobs;
     private JobAdapter jobAdapter;
+    private ArrayList<Job> jobs;
     private FirebaseDatabase database;
 
 
@@ -31,17 +32,22 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         setContentView(activityJobBoardBinding.getRoot());
         allocateActivityTitle("All Jobs");
         //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard
+        jobs = new ArrayList<>();
         findViews();
-        initViews();
+        initRecycleView();
+        loadJobs();
     }
 
-    private void initViews() {
-        MyDbManager.getInstance().getAllJobs(jobs -> {
-            initRecycleView(jobs);
-        });
+
+    private void loadJobs(){
+
+        MyDbManager.getInstance().getAllJobs(allJobs -> {
+            jobs.clear();
+            jobs.addAll(allJobs);
+            jobAdapter.notifyDataSetChanged();});
     }
 
-    private void initRecycleView(ArrayList<Job> jobs){
+    private void initRecycleView(){
         jobAdapter = new JobAdapter(jobs);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -62,14 +68,11 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         list_LST_jobs = findViewById(R.id.list_LST_jobs);
     }
 
-    public void refreshEventsList() {
-        jobAdapter.notifyDataSetChanged();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (jobAdapter != null)
-            jobAdapter.notifyDataSetChanged();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (jobAdapter != null)
+//            jobAdapter.notifyDataSetChanged();
+//    }
 
 }

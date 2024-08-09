@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.jobtracker.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -23,63 +25,64 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ActivityForgotPassword extends AppCompatActivity {
 
 
-        private TextInputEditText forgot_password_EDT_email;
-        private TextInputLayout layout_forgot_password_EDT_email;
-        private MaterialButton forgot_password_BTN_reset;;
-        private ProgressBar forgot_password_progress_bar;
-        private FirebaseAuth mAuth;
+    private TextInputEditText forgot_password_EDT_email;
+    private TextInputLayout layout_forgot_password_EDT_email;
+    private MaterialButton forgot_password_BTN_reset;
+    ;
+    private ProgressBar forgot_password_progress_bar;
+    private FirebaseAuth mAuth;
 
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_forgot_password);
-            findViews();
-            initViews();
-            mAuth = FirebaseAuth.getInstance();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_forgot_password);
+        findViews();
+        initViews();
+        mAuth = FirebaseAuth.getInstance();
 
+    }
+
+    private void findViews() {
+        forgot_password_EDT_email = findViewById(R.id.forgot_password_EDT_email);
+        layout_forgot_password_EDT_email = findViewById(R.id.layout_forgot_password_EDT_email);
+        forgot_password_BTN_reset = findViewById(R.id.forgot_password_BTN_reset);
+        forgot_password_progress_bar = findViewById(R.id.forgot_password_progress_bar);
+    }
+
+    private void initViews() {
+        forgot_password_BTN_reset.setOnClickListener((v) -> resetPassword());
+    }
+
+    private void resetPassword() {
+        layout_forgot_password_EDT_email.setError(null);
+        String email = forgot_password_EDT_email.getText().toString().trim();
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            layout_forgot_password_EDT_email.setError("Please enter valid email");
+            layout_forgot_password_EDT_email.requestFocus();
+            return;
         }
-
-        private void findViews() {
-            forgot_password_EDT_email=findViewById(R.id.forgot_password_EDT_email);
-            layout_forgot_password_EDT_email=findViewById(R.id.layout_forgot_password_EDT_email);
-            forgot_password_BTN_reset=findViewById(R.id.forgot_password_BTN_reset);
-            forgot_password_progress_bar=findViewById(R.id.forgot_password_progress_bar);
-        }
-
-        private void initViews(){
-            forgot_password_BTN_reset.setOnClickListener((v) -> resetPassword());
-        }
-
-        private void resetPassword(){
-            layout_forgot_password_EDT_email.setError(null);
-            String email=forgot_password_EDT_email.getText().toString().trim();
-
-            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                layout_forgot_password_EDT_email.setError("Please enter valid email");
-                layout_forgot_password_EDT_email.requestFocus();
-                return;
+        forgot_password_progress_bar.setVisibility(View.VISIBLE);
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(ActivityForgotPassword.this, "Please check your email to reset password", Toast.LENGTH_SHORT).show();
+                moveToLogin();
+                forgot_password_progress_bar.setVisibility(View.GONE);
             }
-                forgot_password_progress_bar.setVisibility(View.VISIBLE);
-                mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(ActivityForgotPassword.this, "Please check your email to reset password",Toast.LENGTH_SHORT).show();
-                            moveToLogin();
-                        }
-                        else{
-                            Toast.makeText(ActivityForgotPassword.this, "Failed to reset password",Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ActivityForgotPassword.this, "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                forgot_password_progress_bar.setVisibility(View.GONE);
+            }
+        });
 
-                        }
-                        forgot_password_progress_bar.setVisibility(View.GONE);
+    }
 
-                    }
-                });
 
-        }
-
-    private void moveToLogin(){
+    private void moveToLogin() {
         Intent i = new Intent(getApplicationContext(), ActivityLogin.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
