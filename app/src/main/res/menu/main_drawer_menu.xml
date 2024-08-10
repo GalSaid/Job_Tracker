@@ -24,6 +24,11 @@
             android:icon="@drawable/ic_exit"
             android:title="@string/log_out" />
 
+        <item
+            android:id="@+id/nav_analysis"
+            android:icon="@drawable/ic_chart_pie"
+            android:title="@string/analysis" />
+
     </group>
 
 </menu>

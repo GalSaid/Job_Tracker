@@ -59,6 +59,10 @@
             android:name=".Views.ActivityProfile"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".Views.ActivityAnalysis"
+            android:exported="false">
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.jobtracker.R;
+import com.example.jobtracker.Views.ActivityAnalysis;
 import com.example.jobtracker.Views.ActivityProfile;
 import com.example.jobtracker.Views.ActivityWelcome;
 import com.example.jobtracker.Views.ActivityJobBoard;
@@ -56,6 +57,10 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
             overridePendingTransition(0, 0);
         } else if(item.getItemId()==R.id.nav_logout){
             logOut();
+        }
+        else if (item.getItemId() == R.id.nav_analysis) {
+            startActivity(new Intent(this, ActivityAnalysis.class));
+            overridePendingTransition(0, 0);
         }
         return false;
     }

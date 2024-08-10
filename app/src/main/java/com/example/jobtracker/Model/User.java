@@ -12,6 +12,10 @@ public class User {
     private String pdfCV;
     private String wordCV;
     private HashMap<String, Application> myApplications = new HashMap<>();
+    private int totalPending = 0;
+    private int totalAccepted = 0;
+    private int totalRejected = 0;
+    private int totalInProcess = 0;
 
     public User() {}
 
@@ -77,5 +81,37 @@ public class User {
 
     public void setMyApplications(HashMap<String, Application> myApplications) {
         this.myApplications = myApplications;
+    }
+
+    public int getTotalPending() {
+        return totalPending;
+    }
+
+    public void setTotalPending(int totalPending) {
+        this.totalPending = totalPending;
+    }
+
+    public int getTotalAccepted() {
+        return totalAccepted;
+    }
+
+    public void setTotalAccepted(int totalAccepted) {
+        this.totalAccepted = totalAccepted;
+    }
+
+    public int getTotalRejected() {
+        return totalRejected;
+    }
+
+    public void setTotalRejected(int totalRejected) {
+        this.totalRejected = totalRejected;
+    }
+
+    public int getTotalInProcess() {
+        return totalInProcess;
+    }
+
+    public void setTotalInProcess(int totalInProcess) {
+        this.totalInProcess = totalInProcess;
     }
 }

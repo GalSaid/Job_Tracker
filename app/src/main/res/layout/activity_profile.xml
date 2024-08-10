@@ -121,10 +121,11 @@
                         android:id="@+id/profile_LBL_wordName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="start"
                         android:textColor="#969BA0"
                         android:textSize="@dimen/data_text_size"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -145,7 +146,7 @@
                         android:id="@+id/profile_LBL_pdfName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="start"
                         android:textColor="#969BA0"
                         android:textSize="@dimen/data_text_size"
                         android:maxLines="2"

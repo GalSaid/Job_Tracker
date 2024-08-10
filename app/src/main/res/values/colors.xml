@@ -11,6 +11,11 @@
     <color name="background_apps_color">#EEF3F7</color>
     <color name="job_date_color">#4E5356</color>
     <color name="background_color">#D9DBDC</color>
-
+    <color name="InProcess">#FFA726</color>
+    <color name="Accepted">#66BB6A</color>
+    <color name="Rejected">#EF5350</color>
+    <color name="Pending">#29B6F6</color>
+    <color name="color_one">#fb7268</color>
+    <color name="color_two">#E3E0E0</color>
 
 </resources>

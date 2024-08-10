@@ -50,13 +50,11 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         applications = new ArrayList<>();
         findViews();
         initRecycleView();
-        Log.d("Gali", "on create");
         loadApplications();
     }
 
     private void loadApplications() {
         MyDbManager.getInstance().getAllApplications(apps -> {
-            Log.d("Gali", "get all the apps");
             applications.clear();
             applications.addAll(apps);
             appAdapter.notifyDataSetChanged();
@@ -64,14 +62,13 @@ public class ActivityMyApplications extends DrawerBaseActivity {
     }
 
     private void initRecycleView() {
-        appAdapter = new ApplicationAdapter(applications,this);
+        appAdapter = new ApplicationAdapter(applications, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         list_LST_applications.setLayoutManager(linearLayoutManager);
         list_LST_applications.setAdapter(appAdapter);
-        if (appAdapter == null)
-            Log.d("Gali", "appAdapter is null1");
+
         appAdapter.setApplicationCallback(new ApplicationCallback() {
             @Override
             public void addEvent(Application app, int position, AppEvent event) {
@@ -81,9 +78,8 @@ public class ActivityMyApplications extends DrawerBaseActivity {
             @Override
             public void updateReturnStatus(boolean isChecked, Application app, int position) {
                 app.setReturned(isChecked);
-                MyDbManager.getInstance().updateApplication(app, () -> {
-                    appAdapter.notifyItemChanged(position);
-                });
+                MyDbManager.getInstance().updateApplication(app, app.getStatus());
+
             }
         });
     }
@@ -94,8 +90,6 @@ public class ActivityMyApplications extends DrawerBaseActivity {
 
 
     private void openEvent(Application app, AppEvent event) {
-        Log.d("Gal", "entet to open event");
-
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_event, null);
         MaterialTextView event_LBL_title = dialogView.findViewById(R.id.event_LBL_title);
         TextInputLayout event_layout_EDT_title_description = dialogView.findViewById(R.id.event_layout_EDT_title_description);
@@ -114,7 +108,6 @@ public class ActivityMyApplications extends DrawerBaseActivity {
             event_LBL_title.setText(R.string.add_new_event);
             event_BTN_save.setText(R.string.add);
         } else { //edit event
-            Log.d("Gal", "event  here is not null");
             event_LBL_title.setText(R.string.edit_event);
             event_BTN_save.setText(R.string.edit);
             event_EDT_title_description.setText(event.getTitle());

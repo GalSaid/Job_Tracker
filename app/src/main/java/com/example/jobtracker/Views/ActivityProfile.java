@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 
-import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
 import com.example.jobtracker.Utilities.DrawerBaseActivity;
 import com.example.jobtracker.Utilities.MyDbManager;
@@ -48,9 +47,12 @@ public class ActivityProfile extends DrawerBaseActivity {
     private MaterialTextView profile_LBL_pdfName;
     private Uri uri_pdf=null;
     private Uri uri_word=null;
+    private String previousPdfUrl =null;
+    private String previousWordUrl =null;
     private ProgressBar profile_progress_bar;
     private ShapeableImageView profile_IMG_pdf;
     private ShapeableImageView profile_IMG_word;
+    private boolean editMode=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +88,29 @@ public class ActivityProfile extends DrawerBaseActivity {
             profile_EDT_name.setText(user.getName());
             profile_EDT_phone.setText(user.getPhoneNumber());
             profile_EDT_description.setText(user.getDescription());
-            if(user.getPdfCV()!=null)
-                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(user.getPdfCV())));
+            previousPdfUrl =user.getPdfCV();
+            previousWordUrl =user.getWordCV();
+            if(previousPdfUrl !=null && !previousPdfUrl.isEmpty())
+                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousPdfUrl)));
             else
                 profile_LAYOT_pdf.setVisibility(View.GONE);
-            if(user.getWordCV()!=null)
-                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(user.getWordCV())));
+
+            if(previousWordUrl !=null && !previousWordUrl.isEmpty())
+                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousWordUrl)));
             else
                 profile_LAYOT_word.setVisibility(View.GONE);
+        });
+        profile_LAYOT_pdf.setOnClickListener(v -> {
+            if(editMode)
+                uploadPdfCV();
+            else
+                viewPdf();
+        });
+        profile_LAYOT_word.setOnClickListener(v -> {
+            if (editMode)
+                uploadWordCV();
+            else
+                viewWord();
         });
         noEditMode();
         profile_IMAGEVIEW_edit.setOnClickListener(v -> {
@@ -105,22 +122,11 @@ public class ActivityProfile extends DrawerBaseActivity {
     }
 
     private void moveToEditMode(){
+        editMode=true;
         profile_BTN_update.setVisibility(View.VISIBLE);
         profile_EDT_name.setEnabled(true);
         profile_EDT_phone.setEnabled(true);
         profile_EDT_description.setEnabled(true);
-        profile_LAYOT_pdf.setFocusable(true);
-        profile_LAYOT_pdf.setFocusableInTouchMode(true);
-        profile_LAYOT_word.setFocusable(true);
-        profile_LAYOT_word.setFocusableInTouchMode(true);
-        profile_LAYOT_pdf.setClickable(true);
-        profile_LAYOT_word.setClickable(true);
-        profile_LAYOT_pdf.setOnClickListener(v -> {
-            uploadPdfCV();
-        });
-        profile_LAYOT_word.setOnClickListener(v -> {
-            uploadWordCV();
-        });
     }
 
     private void updateProfile() {
@@ -214,17 +220,27 @@ public class ActivityProfile extends DrawerBaseActivity {
         launcherPdf.launch(Intent.createChooser(intent, "Select PDF"));
     }
 
+    private void viewPdf(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setType("application/pdf");
+        intent.setData(Uri.parse(previousPdfUrl));
+        startActivity(intent);
+    }
+
+    private void viewWord(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        intent.setData(Uri.parse(previousWordUrl));
+        startActivity(intent);
+    }
+
     private void noEditMode(){
+        editMode=false;
         profile_BTN_update.setVisibility(View.INVISIBLE);
         profile_EDT_name.setEnabled(false);
         profile_EDT_phone.setEnabled(false);
         profile_EDT_description.setEnabled(false);
-        profile_LAYOT_pdf.setClickable(false);
-        profile_LAYOT_pdf.setFocusable(false);
-        profile_LAYOT_pdf.setFocusableInTouchMode(false);
-        profile_LAYOT_word.setClickable(false);
-        profile_LAYOT_word.setFocusable(false);
-        profile_LAYOT_word.setFocusableInTouchMode(false);
+
     }
 
 }

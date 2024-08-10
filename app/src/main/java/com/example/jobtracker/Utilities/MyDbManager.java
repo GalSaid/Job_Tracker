@@ -49,21 +49,21 @@ public class MyDbManager {
     }
 
 
-    public static void init(Context context){
-        if (instance == null){
-            synchronized (ImageLoader.class){
-                if (instance == null){
+    public static void init(Context context) {
+        if (instance == null) {
+            synchronized (ImageLoader.class) {
+                if (instance == null) {
                     instance = new MyDbManager(context);
                 }
             }
         }
     }
 
-    public void createJobsAndLoadToDB(){
-        HashMap<String,Job> jobs = new HashMap<>();
-        jobs.put("j1",new Job(
+    public void createJobsAndLoadToDB() {
+        HashMap<String, Job> jobs = new HashMap<>();
+        jobs.put("j1", new Job(
                 "Software Developer",
-             "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FTech%20Innovations.png?alt=media&token=9a42a9c0-e266-43b7-bfbc-0a9acd28390a",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FTech%20Innovations.png?alt=media&token=9a42a9c0-e266-43b7-bfbc-0a9acd28390a",
                 "Tech Innovations",
                 "galsaid123@gmail.com",
                 true,
@@ -72,7 +72,7 @@ public class MyDbManager {
                 "Tech Innovations is a forward-thinking technology company dedicated to delivering cutting-edge software solutions. We pride ourselves on fostering an innovative environment where our team can grow and excel. Our mission is to enhance business operations through our advanced technology and exceptional service.",
                 "To be successful in this role, you should have a strong proficiency in Java and experience with the Spring Boot framework. We are looking for candidates with excellent problem-solving skills, the ability to work in a fast-paced environment, and a solid understanding of software development best practices. A bachelor’s degree in Computer Science or a related field is preferred.",
                 "Holon, Israel",
-               "25/07/2024").setId("j1"));
+                "25/07/2024").setId("j1"));
         jobs.put("j2", new Job(
                 "Digital Marketing Specialist",
                 "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FCreative%20Marketing.jpg?alt=media&token=c1cd698e-2739-4baf-895b-9bc5e2f7c670",
@@ -84,12 +84,12 @@ public class MyDbManager {
                 "Creative Marketing excels in crafting innovative digital strategies to elevate brand presence and growth. Our team is passionate about creativity and driven by results, always aiming to push the boundaries of digital marketing to deliver exceptional outcomes for our clients.",
                 "We require candidates to have a solid understanding of SEO, Google Ads, and content creation. You should possess at least 3 years of experience in digital marketing, with a proven track record of managing successful campaigns. Strong analytical skills, creativity, and the ability to work independently are essential.",
                 "Tel Aviv , Israel",
-               "15/07/2024")
-        .setId("j2"));
+                "15/07/2024")
+                .setId("j2"));
 
         jobs.put("j3", new Job(
                 "Data Analyst",
-           "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FIntel.png?alt=media&token=aa1d5fa3-ba2a-4489-9e07-cd4954c3ecb3",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FIntel.png?alt=media&token=aa1d5fa3-ba2a-4489-9e07-cd4954c3ecb3",
                 "Intel",
                 "galisaid123@gmail.com",
                 true,
@@ -98,12 +98,12 @@ public class MyDbManager {
                 "Intel delivers data-driven strategies to optimize business performance and decision-making. We value innovation and excellence in all aspects of our work, aiming to be a leader in the data analysis field.",
                 "The ideal candidate will have strong proficiency in SQL and experience with data visualization tools such as Tableau or Power BI. You should have excellent analytical and problem-solving skills, along with the ability to translate complex data into clear and actionable insights. Prior experience in a similar role is required.",
                 "Austin, TX",
-              "30/06/2024"
+                "30/06/2024"
         ).setId("j3"));
 
         jobs.put("j4", new Job(
                 "Project Manager",
-             "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FGlobal%20Ventures.png?alt=media&token=20cacccd-f7f8-4ad1-8810-e1bcbb860efa",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FGlobal%20Ventures.png?alt=media&token=20cacccd-f7f8-4ad1-8810-e1bcbb860efa",
                 "Global Ventures",
                 "galisaid123@gmail.com",
                 true,
@@ -117,7 +117,7 @@ public class MyDbManager {
 
         jobs.put("j5", new Job(
                 "UX Designer",
-               "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FDesign%20Wizards.jpg?alt=media&token=0ea35f88-31e7-43b7-aa00-4833d3afbd36",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FDesign%20Wizards.jpg?alt=media&token=0ea35f88-31e7-43b7-aa00-4833d3afbd36",
                 "Design Wizards",
                 "galisaid123@gmail.com",
                 true,
@@ -131,7 +131,7 @@ public class MyDbManager {
 
         jobs.put("j6", new Job(
                 "HR Manager",
-               "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FPeopleFirst%20Solutions.png?alt=media&token=b56bf5a2-5845-4a77-8bfe-8e6e68ade37f",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FPeopleFirst%20Solutions.png?alt=media&token=b56bf5a2-5845-4a77-8bfe-8e6e68ade37f",
                 "PeopleFirst Solutions",
                 "galisaid123@gmail.com",
                 true,
@@ -140,11 +140,11 @@ public class MyDbManager {
                 "PeopleFirst Solutions is dedicated to providing comprehensive HR services that support both employees and organizational goals. We are committed to creating a supportive and engaging workplace where our team can thrive. Our focus is on driving employee success and organizational excellence through effective HR management.",
                 "Candidates should have a strong understanding of HR practices and experience in recruitment and employee management. Excellent communication and interpersonal skills are essential, along with the ability to handle sensitive situations with professionalism. A degree in Human Resources or a related field is preferred.",
                 "Boston, MA",
-               "01/10/2024"
+                "01/10/2024"
         ).setId("j6"));
         jobs.put("j7", new Job(
                 "Cloud Solutions Architect",
-               "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FRapid.png?alt=media&token=5616eb21-730d-4d83-a249-7fbc967b8866",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FRapid.png?alt=media&token=5616eb21-730d-4d83-a249-7fbc967b8866",
                 "Rapid",
                 "galisaid123@gmail.com",
                 true,
@@ -153,7 +153,7 @@ public class MyDbManager {
                 "Rapid is a leading technology firm based in Israel, specializing in innovative cloud computing and IT solutions. We are dedicated to delivering cutting-edge technology to help businesses transform and thrive in a digital world. Our team is composed of highly skilled professionals who are passionate about leveraging technology to drive success.",
                 "Candidates should have extensive experience with cloud platforms such as AWS, Azure, or Google Cloud. A strong background in designing and managing cloud architectures, excellent problem-solving skills, and the ability to work collaboratively with technical teams are essential. Relevant certifications and a degree in Computer Science or a related field are preferred.",
                 "Tel Aviv, Israel",
-              "01/09/2024"
+                "01/09/2024"
         ).setId("j7"));
         jobs.put("j8", new Job(
                 "AI Research Scientist",
@@ -166,12 +166,12 @@ public class MyDbManager {
                 "InnovateAI Labs is a pioneering research and development company based in Israel, focused on pushing the boundaries of artificial intelligence and machine learning. Our mission is to drive technological innovation and provide state-of-the-art AI solutions that transform industries and improve lives.",
                 "Candidates should have a Ph.D. in Computer Science, AI, or a related field, with a strong background in machine learning and deep learning algorithms. Experience with AI frameworks like TensorFlow or PyTorch, and a track record of published research is essential. Strong analytical skills and the ability to work on complex problems are required.",
                 "Haifa, Israel",
-               "15/10/2024"
+                "15/10/2024"
         ).setId("j8"));
 
         jobs.put("j9", new Job(
                 "Blockchain Developer",
-               "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FBlockChain%20Innovations.png?alt=media&token=d3bbd7d9-b710-40a7-9945-0913670c7fb2",
+                "https://firebasestorage.googleapis.com/v0/b/job-tracker-8b2b8.appspot.com/o/Companies%2FBlockChain%20Innovations.png?alt=media&token=d3bbd7d9-b710-40a7-9945-0913670c7fb2",
                 "BlockChain Innovations",
                 "galisaid123@gmail.com",
                 true,
@@ -180,7 +180,7 @@ public class MyDbManager {
                 "BlockChain Innovations is a leading tech company in Israel specializing in blockchain technology. We are dedicated to advancing blockchain solutions to drive digital transformation and enhance security, transparency, and efficiency for our clients.",
                 "We are looking for candidates with strong experience in blockchain development, particularly with Ethereum and Solidity. Proficiency in creating smart contracts, knowledge of cryptographic protocols, and the ability to develop secure and scalable dApps are essential. A background in Computer Science or a related field is preferred.",
                 "Tel Aviv, Israel",
-              "01/11/2024"
+                "01/11/2024"
         ).setId("j9"));
 
         jobs.put("j10", new Job(
@@ -194,7 +194,7 @@ public class MyDbManager {
                 "SecureTech Solutions is a premier cybersecurity firm based in Israel, focused on providing comprehensive security solutions to protect businesses from cyber threats. We are committed to safeguarding digital assets and ensuring the highest level of security for our clients through innovative and effective cybersecurity practices.",
                 "Candidates should have a solid understanding of cybersecurity principles, experience with security tools and technologies, and the ability to analyze and respond to security incidents. Relevant certifications such as CISSP or CEH, along with a degree in Cybersecurity or a related field, are preferred.",
                 "Jerusalem, Israel",
-              "15/12/2024"
+                "15/12/2024"
         ).setId("j10"));
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -202,21 +202,20 @@ public class MyDbManager {
         jobsRef.setValue(jobs);
     }
 
-    public void updateJobCompanyImage(String jobId,String imageUrl, CallBack callBack) {
+    public void updateJobCompanyImage(String jobId, String imageUrl, CallBack callBack) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(JOB_TABLE);
 
         usersRef.child(jobId).child("companyImg").setValue(imageUrl)
                 .addOnSuccessListener(unused -> {
-                    if(callBack != null)
+                    if (callBack != null)
                         callBack.res(null);
                 });
     }
 
 
-
-    public ArrayList<AppEvent> convertEventsHashMapToArrayList(HashMap<String, AppEvent> hashMap){
+    public ArrayList<AppEvent> convertEventsHashMapToArrayList(HashMap<String, AppEvent> hashMap) {
         return new ArrayList<>(hashMap.values());
     }
 
@@ -228,7 +227,9 @@ public class MyDbManager {
         void res();
     }
 
-
+    public interface getCountStatus{
+        void res(int countPending, int countAccepted, int countRejected, int countInProcess);
+    }
 
 
 //    public void getUserImage(CallBack<String> callBack) {
@@ -266,11 +267,11 @@ public class MyDbManager {
         usersRef.child(userUid).child("pdfCV").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String pdf_cv= snapshot.getValue(String.class);
-                    if(pdf_cv!=null)
-                        callBack.res(StorageManager.getInstance().getFileName(Uri.parse(pdf_cv)));
-                    else
-                        callBack.res(null);
+                String pdf_cv = snapshot.getValue(String.class);
+                if (pdf_cv != null)
+                    callBack.res(StorageManager.getInstance().getFileName(Uri.parse(pdf_cv)));
+                else
+                    callBack.res(null);
             }
 
             @Override
@@ -287,8 +288,8 @@ public class MyDbManager {
         usersRef.child(userUid).child("wordCV").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String word_cv= snapshot.getValue(String.class);
-                if(word_cv!=null)
+                String word_cv = snapshot.getValue(String.class);
+                if (word_cv != null)
                     callBack.res(StorageManager.getInstance().getFileName(Uri.parse(word_cv)));
                 else
                     callBack.res(null);
@@ -300,7 +301,6 @@ public class MyDbManager {
             }
         });
     }
-
 
 
     public void getAllJobs(CallBack<ArrayList<Job>> callBack) {
@@ -316,7 +316,7 @@ public class MyDbManager {
                     ArrayList<Job> jobs = new ArrayList<>();
                     for (DataSnapshot snapshot : task.getResult().getChildren()) {
                         Job job = snapshot.getValue(Job.class);
-                        if(job!=null && job.isActive())
+                        if (job != null && job.isActive())
                             jobs.add(job);
                     }
                     callBack.res(jobs);
@@ -360,13 +360,35 @@ public class MyDbManager {
 //    }
 
 
+    //    public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
+//
+//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
+//
+//        usersRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                ArrayList<Application> applications = new ArrayList<>();
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Application app = snapshot.getValue(Application.class);
+//                    applications.add(app);
+//                }
+//                callBack.res(applications); // Pass the retrieved list to the callback
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Toast.makeText(context, "Failed to retrieve applications: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
     public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
-
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
 
-        usersRef.addValueEventListener(new ValueEventListener() {
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Application> applications = new ArrayList<>();
@@ -384,30 +406,102 @@ public class MyDbManager {
         });
     }
 
-
     public void addApplication(String userId, Application app, CallBackMove callBack) {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         usersRef.child(userId).child("myApplications").child(app.getJobId()).setValue(app)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to add application",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Failed to add application", Toast.LENGTH_SHORT).show();
                 }).addOnSuccessListener(unused -> {
                     callBack.res();
+                    increasePendingCount(userId);
                 });
     }
 
-    public void updateApplication(Application app, OnAppUpdateListener listener) {
+    public void increasePendingCount(String userId) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+
+        // Retrieve current counts
+        usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int currentCountOfPending = snapshot.child(getStatusString(context.getString(R.string.pending))).getValue(int.class);
+
+                usersRef.child(userId).child(getStatusString(context.getString(R.string.pending))).setValue(currentCountOfPending + 1)
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed to update status pending", Toast.LENGTH_SHORT).show();
+                        });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void updateCountStatus(String statusToreduce, String statusToIncrease) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Retrieve current counts
+        usersRef.child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer currentIncreaseCount = snapshot.child(getStatusString(statusToIncrease)).getValue(Integer.class);
+                Integer currentReduceCount = snapshot.child(getStatusString(statusToreduce)).getValue(Integer.class);
+                Log.d("FF","currentIncreaseCount: "+currentIncreaseCount);
+                if(currentIncreaseCount==null)
+                    currentIncreaseCount=0;
+                if(currentReduceCount==null)
+                    currentReduceCount=0;
+                usersRef.child(userUid).child(getStatusString(statusToIncrease)).setValue(currentIncreaseCount + 1)
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed to update status "+statusToIncrease, Toast.LENGTH_SHORT).show();
+                        });
+
+                usersRef.child(userUid).child(getStatusString(statusToreduce)).setValue(currentReduceCount - 1)
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(context, "Failed to update status "+statusToreduce, Toast.LENGTH_SHORT).show();
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getStatusString(String status){
+        switch (status){
+            case "Pending":
+                return "totalPending";
+            case "Accepted":
+                return "totalAccepted";
+            case "Rejected":
+                return "totalRejected";
+            case "In Process":
+                return "totalInProcess";
+            default:
+                return "";
+        }
+    }
+
+    public void updateApplication(Application app, String oldStatus) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
-        usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app).addOnSuccessListener(
-                unused -> {
-                    listener.onSuccess();
-                }
-                )
+        usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to update application",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Failed to update application", Toast.LENGTH_SHORT).show();
+                }).addOnSuccessListener(unused -> {
+                    if(!oldStatus.equals(app.getStatus()))
+                        updateCountStatus(oldStatus, app.getStatus());
                 });
     }
 
@@ -415,13 +509,14 @@ public class MyDbManager {
         void onSuccess();
     }
 
-    public void addOrUpdateEvent(Application app, AppEvent event){
+
+    public void addOrUpdateEvent(Application app, AppEvent event) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         usersRef.child(userUid).child("myApplications").child(app.getJobId()).child("allEvents").child(event.getId()).setValue(event)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to add event",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Failed to add event", Toast.LENGTH_SHORT).show();
                 });
 
     }
@@ -450,6 +545,28 @@ public class MyDbManager {
 //        });
 //    }
 
+
+    public void getStatusCount(getCountStatus callBack) {
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE);
+
+        usersRef.child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if(user==null)
+                    callBack.res(0,0,0,0);
+                else
+                    callBack.res(user.getTotalPending(),user.getTotalAccepted(),user.getTotalRejected(),user.getTotalInProcess());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void getUser(CallBack<User> callBack) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -480,9 +597,8 @@ public class MyDbManager {
 
                 if (job != null) {
                     callBack.res(job);
-                }
-                else{
-                    Toast.makeText(context, "There is no job "+jobId,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "There is no job " + jobId, Toast.LENGTH_SHORT).show();
                     callBack.res(null);
                 }
             }
@@ -507,7 +623,7 @@ public class MyDbManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "There is no job "+jobId,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "There is no job " + jobId, Toast.LENGTH_SHORT).show();
             }
         });
     }

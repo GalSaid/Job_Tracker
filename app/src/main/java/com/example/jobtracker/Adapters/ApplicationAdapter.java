@@ -124,7 +124,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 = new AppEventAdapter(
                 MyDbManager.getInstance().convertEventsHashMapToArrayList(app.getAllEvents()));
         childItemAdapter.setAppEventCallback((event, pos) -> {
-            appCallback.addEvent(app,pos,event);
+           appCallback.addEvent(app,pos,event);
         }
         );
         holder
@@ -174,14 +174,11 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     // Update application status
                     int pos = getAdapterPosition();
                     Application app = getItem(pos);
-                    if (!app.getStatus().equals(selectedStatus)) {
+                    String oldStatus = app.getStatus();
+                    if (!oldStatus.equals(selectedStatus)) {
                         app.setStatus(selectedStatus);
                         Log.d("Gali","here1");
-                        MyDbManager.getInstance().updateApplication(app,()->{
-                            notifyItemChanged(pos);
-                            Log.d("Gali","here2");
-
-                        });
+                        MyDbManager.getInstance().updateApplication(app,oldStatus);
                     }
                 }
 

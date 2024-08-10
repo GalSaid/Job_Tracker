@@ -178,8 +178,10 @@ public class ActivityRegister extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             Toast.makeText(ActivityRegister.this, "User registered Successfully",Toast.LENGTH_SHORT).show();
                                             moveToAllJobs();
-                                            StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
-                                            StorageManager.getInstance().uploadWordCVToFB(uri_word);
+                                            if(uri_pdf!=null)
+                                                StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
+                                            if(uri_word!=null)
+                                                StorageManager.getInstance().uploadWordCVToFB(uri_word);
                                         }
                                         else{
                                             Toast.makeText(ActivityRegister.this, "User failed to register",Toast.LENGTH_SHORT).show();

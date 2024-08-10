@@ -58,7 +58,9 @@ dependencies {
     implementation(libs.firebase.ui.auth)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation (libs.okhttp)
+    implementation (libs.eazegraph)
+    implementation(libs.material.v190)
+    implementation (libs.library)
 
-    implementation("com.google.android.material:material:1.9.0")
 }

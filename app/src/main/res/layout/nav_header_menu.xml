@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:padding="20dp"
-    android:orientation="vertical"
     android:background="@color/title_color"
->
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <ImageView
         android:id="@+id/main_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/ic_logo" />
 
     <TextView
         android:id="@+id/name_LBL"
@@ -22,8 +21,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:text="@string/job_tracker"
-        android:textSize="18sp"
         android:textColor="@color/white"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
 </LinearLayout>
