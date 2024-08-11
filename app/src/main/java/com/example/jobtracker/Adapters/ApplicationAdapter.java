@@ -50,9 +50,9 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     public ApplicationAdapter(ArrayList<Application> apps, Context context) {
         this.apps = apps;
-        this.context=context;
-        statusAdapter  = ArrayAdapter.createFromResource(
-               context,
+        this.context = context;
+        statusAdapter = ArrayAdapter.createFromResource(
+                context,
                 R.array.status_array,
                 android.R.layout.simple_spinner_item
         );
@@ -86,7 +86,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         // Apply the adapter to the spinner.
         holder.application_SPINNER_status.setAdapter(statusAdapter);
         String status = app.getStatus();
-       // holder.application_SPINNER_status.setOnItemSelectedListener(null);
+        // holder.application_SPINNER_status.setOnItemSelectedListener(null);
         holder.application_SPINNER_status.setSelection(statusAdapter.getPosition(status));
 
         // Create a layout manager
@@ -122,9 +122,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 = new AppEventAdapter(
                 MyDbManager.getInstance().convertEventsHashMapToArrayList(app.getAllEvents()));
         childItemAdapter.setAppEventCallback((event, pos) -> {
-           appCallback.addEvent(app,pos,event);
-        }
-        );
+            appCallback.addEvent(app, position, event);
+        });
         holder
                 .ChildRecyclerView
                 .setLayoutManager(layoutManager);
@@ -175,7 +174,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     String oldStatus = app.getStatus();
                     if (!oldStatus.equals(selectedStatus)) {
                         app.setStatus(selectedStatus);
-                        MyDbManager.getInstance().updateApplication(app,oldStatus);
+                        MyDbManager.getInstance().updateApplication(app, oldStatus);
                     }
                 }
 
@@ -185,7 +184,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 }
             });
             application_CHECKBOX_returned.setOnCheckedChangeListener((buttonView, isChecked) -> {
-               appCallback.updateReturnStatus(isChecked,getItem(getAdapterPosition()),getAdapterPosition());
+                appCallback.updateReturnStatus(isChecked, getItem(getAdapterPosition()), getAdapterPosition());
             });
             ChildRecyclerView
                     = itemView
@@ -193,7 +192,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                             R.id.list_LST_events);
             application_IMAGEVIEW_plus.setOnClickListener(v -> { //add new event to the application
                 if (appCallback != null) {
-                    appCallback.addEvent(getItem(getAdapterPosition()),getAdapterPosition(),null);
+                    appCallback.addEvent(getItem(getAdapterPosition()), getAdapterPosition(), null);
                 }
             });
         }

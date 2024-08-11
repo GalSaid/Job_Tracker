@@ -119,7 +119,6 @@ public class ActivityRegister extends AppCompatActivity {
         String description=register_EDT_description.getText().toString().trim();
         String password=register_EDT_password.getText().toString().trim();
         if(name.isEmpty()){
-            Log.d("gal","here");
             layout_EDT_name.setError("Please enter full name");
             layout_EDT_name.requestFocus();
             valid=false;

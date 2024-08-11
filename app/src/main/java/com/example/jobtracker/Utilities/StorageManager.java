@@ -66,7 +66,7 @@ public class StorageManager {
         }
     }
 
-    public void uploadPdfCVToFB(Uri data){
+    public void uploadPdfCVToFB(Uri data ,GetNewUrlStringCallback callback){
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         MyDbManager.getInstance().getPdfCVName(filename->{
            String pdfFileName=filename;
@@ -78,6 +78,8 @@ public class StorageManager {
                     while(!uriTask.isComplete());
                     Uri uri= uriTask.getResult();
                     databaseReference.child(userUid).child("pdfCV").setValue(uri.toString());
+                    if(callback!=null)
+                        callback.res(uri.toString());
                     if(pdfFileName!=null){ //if the user has already uploaded a pdf file, delete it from the storage
                         StorageReference ref= storageReference.child(userUid+"/"+pdfFileName);
                         ref.delete();
@@ -92,7 +94,14 @@ public class StorageManager {
         });
     }
 
+    public void uploadPdfCVToFB(Uri data){
+        uploadPdfCVToFB(data, null);
+    }
     public void uploadWordCVToFB(Uri data){
+        uploadWordCVToFB(data, null);
+    }
+
+    public void uploadWordCVToFB(Uri data, GetNewUrlStringCallback callback){
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         MyDbManager.getInstance().getWordCVName(filename->{
             String wordFileName=filename;
@@ -104,6 +113,8 @@ public class StorageManager {
                     while(!uriTask.isComplete());
                     Uri uri= uriTask.getResult();
                     databaseReference.child(userUid).child("wordCV").setValue(uri.toString());
+                    if(callback!=null)
+                        callback.res(uri.toString());
                     if(wordFileName!=null){ //if the user has already uploaded a word file, delete it from the storage
                         StorageReference ref= storageReference.child(userUid+"/"+wordFileName);
                         ref.delete();
@@ -144,6 +155,10 @@ public class StorageManager {
 
     public interface FileDownloadCallback {
         void onSuccess(Uri fileUri);
+    }
+
+    public interface GetNewUrlStringCallback {
+        void res(String url);
     }
 
     public void downloadFile(String fileUrl, FileDownloadCallback callback) { //download the file from the remote url

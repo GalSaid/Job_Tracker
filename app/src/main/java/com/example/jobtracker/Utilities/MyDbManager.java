@@ -279,9 +279,9 @@ public class MyDbManager {
     public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
+        DatabaseReference appsRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
 
-        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        appsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Application> applications = new ArrayList<>();
@@ -446,6 +446,30 @@ public class MyDbManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 callBack.res(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getSpecificApplication(String jobId,CallBack<Application> callBack ) { //For activityAnalysis
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid);
+        DatabaseReference appsRef = usersRef.child("myApplications");
+
+        appsRef.child(jobId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Application app = snapshot.getValue(Application.class);
+                    callBack.res(app);
+                } else {
+                    callBack.res(null);
+                }
             }
 
             @Override

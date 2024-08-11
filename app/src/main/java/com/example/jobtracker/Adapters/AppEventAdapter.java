@@ -46,38 +46,39 @@ public class AppEventAdapter extends RecyclerView.Adapter<AppEventAdapter.AppEve
         holder.event_LBL_title.setText(event.getTitle());
         holder.event_LBL_date.setText(event.getDate());
         holder.event_LBL_description.setOnClickListener(v -> {
-            animation(event,holder);
+            animation(event, holder);
         });
         holder.event_LBL_title.setOnClickListener(v -> {
-            animation(event,holder);
+            animation(event, holder);
         });
     }
 
-    private void animation( AppEvent event, AppEventViewHolder holder){
+    private void animation(AppEvent event, AppEventViewHolder holder) {
         ArrayList<ObjectAnimator> animators = new ArrayList<>();
 
-        if (event.isCollapsed()){
+        if (event.isCollapsed()) {
             animators
                     .add(ObjectAnimator
-                            .ofInt(holder.event_LBL_title,"maxLines",holder.event_LBL_title.getLineCount())
-                            .setDuration(Math.max(holder.event_LBL_title.getLineCount() - event.MIN_LINES_COLLAPSED , 0) * 50L));
+                            .ofInt(holder.event_LBL_title, "maxLines", holder.event_LBL_title.getLineCount())
+                            .setDuration(Math.max(holder.event_LBL_title.getLineCount() - event.MIN_LINES_COLLAPSED, 0) * 50L));
             animators
                     .add(ObjectAnimator
-                            .ofInt(holder.event_LBL_description,"maxLines",holder.event_LBL_description.getLineCount())
-                            .setDuration(Math.max(holder.event_LBL_description.getLineCount() - event.MAX_LINES_COLLAPSED , 0) * 50L));
-        }else{
+                            .ofInt(holder.event_LBL_description, "maxLines", holder.event_LBL_description.getLineCount())
+                            .setDuration(Math.max(holder.event_LBL_description.getLineCount() - event.MAX_LINES_COLLAPSED, 0) * 50L));
+        } else {
             animators
                     .add(ObjectAnimator
-                            .ofInt(holder.event_LBL_title,"maxLines",event.MIN_LINES_COLLAPSED)
-                            .setDuration(Math.max(holder.event_LBL_title.getLineCount() - event.MIN_LINES_COLLAPSED , 0) * 50L));
+                            .ofInt(holder.event_LBL_title, "maxLines", event.MIN_LINES_COLLAPSED)
+                            .setDuration(Math.max(holder.event_LBL_title.getLineCount() - event.MIN_LINES_COLLAPSED, 0) * 50L));
             animators
                     .add(ObjectAnimator
-                            .ofInt(holder.event_LBL_description,"maxLines",event.MAX_LINES_COLLAPSED)
-                            .setDuration(Math.max(holder.event_LBL_description.getLineCount() - event.MAX_LINES_COLLAPSED , 0) * 50L));
+                            .ofInt(holder.event_LBL_description, "maxLines", event.MAX_LINES_COLLAPSED)
+                            .setDuration(Math.max(holder.event_LBL_description.getLineCount() - event.MAX_LINES_COLLAPSED, 0) * 50L));
         }
         animators.forEach(ObjectAnimator::start);
         event.setCollapsed(!event.isCollapsed());
     }
+
     @Override
     public int getItemCount() {
         return appEvents == null ? 0 : appEvents.size();
@@ -101,10 +102,10 @@ public class AppEventAdapter extends RecyclerView.Adapter<AppEventAdapter.AppEve
             event_LBL_date = itemView.findViewById(R.id.event_LBL_date);
             event_IMAGEVIEW_Edit = itemView.findViewById(R.id.event_IMAGEVIEW_Edit);
             event_IMAGEVIEW_Edit.setOnClickListener(v -> { // when the edit button of the event is clicked
-                if (eventCallback != null){
+                if (eventCallback != null) {
                     eventCallback.editEvent(getItem(getAdapterPosition()), getAdapterPosition());
                 }
-           });
+            });
         }
     }
 }

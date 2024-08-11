@@ -3,6 +3,7 @@ package com.example.jobtracker.Views;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -47,8 +48,8 @@ public class ActivityProfile extends DrawerBaseActivity {
     private MaterialTextView profile_LBL_pdfName;
     private Uri uri_pdf=null;
     private Uri uri_word=null;
-    private String previousPdfUrl =null;
-    private String previousWordUrl =null;
+    private String currentPdfUrl =null;
+    private String currentWordUrl =null;
     private ProgressBar profile_progress_bar;
     private ShapeableImageView profile_IMG_pdf;
     private ShapeableImageView profile_IMG_word;
@@ -88,17 +89,18 @@ public class ActivityProfile extends DrawerBaseActivity {
             profile_EDT_name.setText(user.getName());
             profile_EDT_phone.setText(user.getPhoneNumber());
             profile_EDT_description.setText(user.getDescription());
-            previousPdfUrl =user.getPdfCV();
-            previousWordUrl =user.getWordCV();
-            if(previousPdfUrl !=null && !previousPdfUrl.isEmpty()) //Show the pdf  cv file name if it exists
-                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousPdfUrl)));
+            currentPdfUrl =user.getPdfCV();
+            Log.d("pttt", "initViews: "+currentPdfUrl);
+            currentWordUrl =user.getWordCV();
+            if(currentPdfUrl !=null && !currentPdfUrl.isEmpty()) //Show the pdf  cv file name if it exists
+                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(currentPdfUrl)));
             else
-                profile_LAYOT_pdf.setVisibility(View.GONE);
+                profile_LBL_pdfName.setText(" No file");
 
-            if(previousWordUrl !=null && !previousWordUrl.isEmpty()) //Show the word cv file name if it exists
-                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousWordUrl)));
+            if(currentWordUrl !=null && !currentWordUrl.isEmpty()) //Show the word cv file name if it exists
+                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(currentWordUrl)));
             else
-                profile_LAYOT_word.setVisibility(View.GONE);
+                profile_LBL_wordName.setText(" No file");
         });
         profile_LAYOT_pdf.setOnClickListener(v -> {
             if(editMode) //If in edit mode, can upload a new pdf cv
@@ -130,7 +132,6 @@ public class ActivityProfile extends DrawerBaseActivity {
     }
 
     private void updateProfile() {
-        noEditMode();
 
         profile_layout_EDT_name.setError(null);
         profile_layout_EDT_phone.setError(null);
@@ -157,6 +158,7 @@ public class ActivityProfile extends DrawerBaseActivity {
             valid=false;
         }
         if(valid){
+            noEditMode();
             profile_progress_bar.setVisibility(View.VISIBLE);
             MyDbManager.getInstance().getUser(user->{
                 if(user==null)
@@ -165,10 +167,14 @@ public class ActivityProfile extends DrawerBaseActivity {
                 user.setPhoneNumber(phone);
                 user.setDescription(description);
                 if(uri_pdf!=null){ //update the new pdf cv
-                    StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
+                    StorageManager.getInstance().uploadPdfCVToFB(uri_pdf, uriString->{
+                        currentPdfUrl=uriString;
+                    });
                 }
                 if(uri_word!=null){ //update the new word cv
-                    StorageManager.getInstance().uploadWordCVToFB(uri_word);
+                    StorageManager.getInstance().uploadWordCVToFB(uri_word, uriString->{
+                        currentWordUrl=uriString;
+                    });
                 }
                 FirebaseDatabase.getInstance().getReference("Users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -194,6 +200,9 @@ public class ActivityProfile extends DrawerBaseActivity {
                 uri_pdf=data.getData();
                 profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(uri_pdf)); //Show the new pdf cv file name
             }
+            else{
+                Toast.makeText(ActivityProfile.this, "Failed to update file",Toast.LENGTH_SHORT).show();
+            }
         }
     });
 
@@ -204,20 +213,33 @@ public class ActivityProfile extends DrawerBaseActivity {
                 uri_word=data.getData();
                 profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(uri_word)); //Show the new word cv file name
             }
+            else{
+                Toast.makeText(ActivityProfile.this, "Failed to update file",Toast.LENGTH_SHORT).show();
+            }
         }
     });
 
     private void viewPdf(){ //view the pdf cv
+        if(currentPdfUrl==null || currentPdfUrl.isEmpty()){
+            Toast.makeText(this, "There is no file",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d("pttt", "viewPdf: "+currentPdfUrl);
+        Log.d("pttt", "viewPdf uri: "+Uri.parse(currentPdfUrl));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/pdf");
-        intent.setData(Uri.parse(previousPdfUrl));
+        intent.setData(Uri.parse(currentPdfUrl));
         startActivity(intent);
     }
 
-    private void viewWord(){ //view the word cv`
+    private void viewWord(){ //view the word cv
+        if(currentWordUrl==null || currentWordUrl.isEmpty()){
+            Toast.makeText(this, "There is no file",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        intent.setData(Uri.parse(previousWordUrl));
+        intent.setData(Uri.parse(currentWordUrl));
         startActivity(intent);
     }
 

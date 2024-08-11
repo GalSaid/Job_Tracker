@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -68,14 +67,7 @@ public class ActivityJob extends AppCompatActivity {
         job_description_LBL_about.setText(job.getAboutAS());
         job_description_LBL_content.setText(job.getDescription());
         job_description_LBL_requirements.setText(job.getRequirements());
-        job_apply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //apply to job
-                showApplyDialog(job);
-
-            }
-        });
+        userAlreadyApplied(job); //check if the user already applied to this job
     }
 
     private void findViews() {
@@ -87,6 +79,25 @@ public class ActivityJob extends AppCompatActivity {
         job_description_LBL_requirements = findViewById(R.id.job_description_LBL_requirements);
         job_description_LBL_content = findViewById(R.id.job_description_LBL_content);
         job_apply = findViewById(R.id.job_apply);
+    }
+
+
+    private void userAlreadyApplied(Job job){
+        MyDbManager.getInstance().getSpecificApplication(job.getId(),app -> {
+            if (app != null) {
+                job_apply.setEnabled(false); // Disable the apply button if the user already applied
+            }
+            else{
+                job_apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //apply to job
+                        showApplyDialog(job);
+
+                    }
+                });
+            }
+        });
     }
 
     private void showApplyDialog(Job job) {

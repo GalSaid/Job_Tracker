@@ -74,24 +74,24 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         appAdapter.setApplicationCallback(new ApplicationCallback() {
             @Override
             public void addEvent(Application app, int position, AppEvent event) { //add new event to specific application
-                openEvent(app, event);
+                openEvent(app, event, position);
             }
 
             @Override
             public void updateReturnStatus(boolean isChecked, Application app, int position) { //update the return status of the application
                 app.setReturned(isChecked);
                 MyDbManager.getInstance().updateApplication(app, app.getStatus());
-
             }
         });
     }
 
     private void findViews() {
         list_LST_applications = findViewById(R.id.application_recyclerview);
+        progress_bar = findViewById(R.id.apps_progress_bar);
     }
 
 
-    private void openEvent(Application app, AppEvent event) { //for new event or edit existing event
+    private void openEvent(Application app, AppEvent event, int appPosition) { //for new event or edit existing event
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_event, null);
         MaterialTextView event_LBL_title = dialogView.findViewById(R.id.event_LBL_title);
         TextInputLayout event_layout_EDT_title_description = dialogView.findViewById(R.id.event_layout_EDT_title_description);
@@ -148,13 +148,15 @@ public class ActivityMyApplications extends DrawerBaseActivity {
             if (valid) {
                 if (event == null)
                     //save the new event
-                    addNewEvent(app, title, description, date);
+                    addNewEvent(app, title, description, date,appPosition);
                 else {
                     //edit the event
                     event.setDate(date);
                     event.setDescription(description);
                     event.setTitle(title);
-                    MyDbManager.getInstance().addOrUpdateEvent(app, event);
+                    app.getAllEvents().put(event.getId(), event);
+                    MyDbManager.getInstance().updateApplication(app, app.getStatus());
+                    appAdapter.notifyItemChanged(appPosition);
                 }
                 // Dismiss the dialog
                 dialog.dismiss();
@@ -164,9 +166,11 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         dialog.show();
     }
 
-    private void addNewEvent(Application app, String title, String description, String date) {
+    private void addNewEvent(Application app, String title, String description, String date, int appPosition) { //add new event to the application
         AppEvent newEvent = new AppEvent(date, description, title);
-        MyDbManager.getInstance().addOrUpdateEvent(app, newEvent);
+        app.getAllEvents().put(newEvent.getId(), newEvent);
+        MyDbManager.getInstance().updateApplication(app, app.getStatus());
+        appAdapter.notifyItemChanged(appPosition);
     }
 
     private void showDatePickerDialog() {
