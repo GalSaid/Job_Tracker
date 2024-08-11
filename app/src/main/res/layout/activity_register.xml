@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
-            android:text="Welcome!"
+            android:text="@string/welcome"
             android:textColor="#969BA0"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             app:placeholderText="Enter your name"
-            android:hint="Full Name"
+            android:hint="@string/full_name"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             app:placeholderText="name@mail.com"
-            android:hint="Email"
+            android:hint="@string/email"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:hint="Phone Number"
+            android:hint="@string/phone_number"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             app:placeholderText="Enter description about yourself"
-            android:hint="description"
+            android:hint="@string/description"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +99,7 @@
             android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="@dimen/data_margin"
             app:endIconMode="password_toggle"
-            android:hint="password"
+            android:hint="@string/password"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:text="Upload your CV"
+            android:text="@string/upload_your_cv"
             android:textColor="#969BA0"
             android:textSize="@dimen/data_text_size"
             />
@@ -134,7 +134,7 @@
             android:layout_marginEnd="8dp"
             android:backgroundTint="#C1C7CE"
             app:icon="@drawable/ic_file_upload"
-            android:text="PDF"
+            android:text="@string/pdf"
             />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_word"
@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#C1C7CE"
             app:icon="@drawable/ic_file_upload"
-            android:text="WORD"
+            android:text="@string/word"
             />
 
     </LinearLayout>
@@ -152,7 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:text="Register"/>
+            android:text="@string/register"/>
     </LinearLayout>
 </ScrollView>
     <ProgressBar

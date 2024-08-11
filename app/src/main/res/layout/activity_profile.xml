@@ -29,7 +29,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Profile Info"
+                    android:text="@string/profile_info"
                     android:textColor="#969BA0"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:hint="Full Name"
+                android:hint="@string/full_name"
                 app:errorEnabled="true"
                 app:placeholderText="Enter your name">
 
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:hint="Phone Number"
+                android:hint="@string/phone_number"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:hint="description"
+                android:hint="@string/description"
                 app:errorEnabled="true"
                 app:placeholderText="Enter description about yourself">
 
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="20dp"
-                android:text="Update" />
+                android:text="@string/update" />
 
         </LinearLayout>
     </ScrollView>

@@ -1,15 +1,15 @@
 package com.example.jobtracker.Utilities;
 
-import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -80,7 +78,7 @@ public class StorageManager {
                     while(!uriTask.isComplete());
                     Uri uri= uriTask.getResult();
                     databaseReference.child(userUid).child("pdfCV").setValue(uri.toString());
-                    if(pdfFileName!=null){
+                    if(pdfFileName!=null){ //if the user has already uploaded a pdf file, delete it from the storage
                         StorageReference ref= storageReference.child(userUid+"/"+pdfFileName);
                         ref.delete();
                     }
@@ -106,7 +104,7 @@ public class StorageManager {
                     while(!uriTask.isComplete());
                     Uri uri= uriTask.getResult();
                     databaseReference.child(userUid).child("wordCV").setValue(uri.toString());
-                    if(wordFileName!=null){
+                    if(wordFileName!=null){ //if the user has already uploaded a word file, delete it from the storage
                         StorageReference ref= storageReference.child(userUid+"/"+wordFileName);
                         ref.delete();
                     }
@@ -121,7 +119,7 @@ public class StorageManager {
     }
 
     @SuppressLint("Range")
-    public String getFileName(Uri uri) {
+    public String getFileName(Uri uri) { //get the name of the file from the uri
         String result = null;
         if (uri.getScheme().equals("content")) {
             Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
@@ -148,7 +146,7 @@ public class StorageManager {
         void onSuccess(Uri fileUri);
     }
 
-    public void downloadFile(String fileUrl, FileDownloadCallback callback) {
+    public void downloadFile(String fileUrl, FileDownloadCallback callback) { //download the file from the remote url
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(fileUrl).build();
 
@@ -184,6 +182,22 @@ public class StorageManager {
             }
         });
     }
+
+    public void uploadWordCV(ActivityResultLauncher<Intent> launcher){ //choose which word file to upload
+        Intent intent = new Intent();
+        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcher.launch(Intent.createChooser(intent, "Select WORD"));
+    }
+
+
+    public void uploadPdfCV(ActivityResultLauncher<Intent> launcher){ //choose which pdf file to upload
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        launcher.launch(Intent.createChooser(intent, "Select PDF"));
+    }
+
 }
 
 

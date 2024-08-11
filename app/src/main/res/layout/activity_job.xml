@@ -75,7 +75,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="23dp"
             android:layout_marginBottom="12dp"
-            android:text="About Us"
+            android:text="@string/about_us"
             android:textStyle="bold"
             android:textSize="@dimen/data_text_size"/>
 
@@ -95,7 +95,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:text="Job Description"
+            android:text="@string/job_description"
             android:textStyle="bold"
             android:textSize="@dimen/data_text_size"/>
 
@@ -115,7 +115,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:text="Requirements"
+            android:text="@string/requirements"
             android:textStyle="bold"
             android:textSize="@dimen/data_text_size"/>
 

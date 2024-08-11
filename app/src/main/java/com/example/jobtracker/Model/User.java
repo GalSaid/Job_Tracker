@@ -9,13 +9,13 @@ public class User {
     private String email;
     private String phoneNumber;
     private String description;
-    private String pdfCV;
-    private String wordCV;
+    private String pdfCV; //the url string in firebase storage of the pdf file
+    private String wordCV;//the url string in firebase storage of the word file
     private HashMap<String, Application> myApplications = new HashMap<>();
-    private int totalPending = 0;
-    private int totalAccepted = 0;
-    private int totalRejected = 0;
-    private int totalInProcess = 0;
+    private int totalPending = 0; //for analysis
+    private int totalAccepted = 0;//for analysis
+    private int totalRejected = 0;//for analysis
+    private int totalInProcess = 0;//for analysis
 
     public User() {}
 

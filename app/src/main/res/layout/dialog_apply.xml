@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="Receiver's Email Address!"
+        android:hint="@string/receiver_s_email_address"
         android:inputType="textEmailAddress"
         android:singleLine="true" />
     <EditText
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:hint="Enter Subject"
+        android:hint="@string/enter_subject"
         android:singleLine="true" />
     <EditText
         android:id="@+id/apply_ET_description"
@@ -26,7 +26,7 @@
         android:layout_height="200dp"
         android:layout_margin="5dp"
         android:gravity="top|start"
-        android:hint="Compose Email"
+        android:hint="@string/compose_email"
         android:inputType="textMultiLine" />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_margin="5dp"
             android:backgroundTint="@color/btn_color"
             android:textColor="@color/black"
-            android:text="Send" />
+            android:text="@string/send" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/apply_BTN_attachment"
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/btn_color"
             android:textColor="@color/black"
-            android:text="attachment" />
+            android:text="@string/attachment" />
     </RelativeLayout>
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/apply_tvAttachment"

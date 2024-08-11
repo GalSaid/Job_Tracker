@@ -2,7 +2,8 @@ package com.example.jobtracker.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
     private JobAdapter jobAdapter;
     private ArrayList<Job> jobs;
     private FirebaseDatabase database;
+    private ProgressBar progress_bar;
 
 
     @Override
@@ -31,7 +33,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         activityJobBoardBinding=ActivityJobBoardBinding.inflate(getLayoutInflater());
         setContentView(activityJobBoardBinding.getRoot());
         allocateActivityTitle("All Jobs");
-        //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard
+        //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard for testing becUse we don't have a admin user
         jobs = new ArrayList<>();
         findViews();
         initRecycleView();
@@ -39,12 +41,16 @@ public class ActivityJobBoard extends DrawerBaseActivity {
     }
 
 
-    private void loadJobs(){
-
+    private void loadJobs(){ //load all jobs from firebase
+        progress_bar.setVisibility(ProgressBar.VISIBLE);
         MyDbManager.getInstance().getAllJobs(allJobs -> {
+            if(allJobs.isEmpty())
+                Toast.makeText(this, "No jobs found", Toast.LENGTH_SHORT).show();
             jobs.clear();
             jobs.addAll(allJobs);
-            jobAdapter.notifyDataSetChanged();});
+            jobAdapter.notifyDataSetChanged();
+            progress_bar.setVisibility(ProgressBar.GONE);
+        });
     }
 
     private void initRecycleView(){
@@ -54,7 +60,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         list_LST_jobs.setLayoutManager(linearLayoutManager);
         list_LST_jobs.setAdapter(jobAdapter);
         jobAdapter.setJobCallback((job, position) -> {
-            //Move to job screen
+            //Move to job details screen
             Intent i = new Intent(getApplicationContext(), ActivityJob.class);
             Bundle bundle = new Bundle();
             bundle.putString(getString(R.string.job_id), job.getId());
@@ -66,13 +72,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
 
     private void findViews() {
         list_LST_jobs = findViewById(R.id.list_LST_jobs);
+        progress_bar=findViewById(R.id.jobs_progress_bar);
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (jobAdapter != null)
-//            jobAdapter.notifyDataSetChanged();
-//    }
 
 }

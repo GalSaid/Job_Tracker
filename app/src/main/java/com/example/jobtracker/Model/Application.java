@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class Application {
-    private boolean returned;
+    private boolean returned; //if they got back to me after sending a CV
     private String status;
     private String userId;
     private String jobId;
-    private String date; //The date the position opened
+    private String date; //the date I applied for the job
     private HashMap<String, AppEvent> allEvents = new HashMap<>();
 
     public Application() {

@@ -31,7 +31,7 @@
             android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="@dimen/data_margin"
             app:placeholderText="name@mail.com"
-            android:hint="email">
+            android:hint="@string/email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             app:endIconMode="password_toggle"
-            android:hint="password">
+            android:hint="@string/password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:layout_weight="4"
                 android:textSize="10sp"
                 android:textStyle="bold"
-                android:text="Forgot Password ?" />
+                android:text="@string/forgot_password" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/login_BTN_register"
@@ -81,7 +81,7 @@
                 android:layout_weight="1"
                 android:textSize="10sp"
                 android:textStyle="bold"
-                android:text="Register" />
+                android:text="@string/register" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:layout_marginHorizontal="32dp"
-            android:text="Login"/>
+            android:text="@string/login"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
     <ProgressBar

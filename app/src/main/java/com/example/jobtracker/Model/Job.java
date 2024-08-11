@@ -9,7 +9,7 @@ public class Job{
     private boolean isActive;
     private boolean isFullTime;
     private String description;
-    private String aboutAS;
+    private String aboutAS;//About the company
     private String requirements;
     private String location;
     private String date; //The date the position opened

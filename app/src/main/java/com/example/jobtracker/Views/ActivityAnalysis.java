@@ -1,26 +1,20 @@
 package com.example.jobtracker.Views;
 
-import android.content.Intent;
-import android.graphics.Color;
+
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.jobtracker.Adapters.JobAdapter;
-import com.example.jobtracker.Model.Job;
+
 import com.example.jobtracker.R;
 import com.example.jobtracker.Utilities.DrawerBaseActivity;
 import com.example.jobtracker.Utilities.MyDbManager;
 import com.example.jobtracker.databinding.ActivityAnalysisBinding;
-import com.example.jobtracker.databinding.ActivityJobBoardBinding;
-import com.google.firebase.database.FirebaseDatabase;
+
 
 import org.eazegraph.lib.models.PieModel;
 
-import java.util.ArrayList;
 
 public class ActivityAnalysis extends DrawerBaseActivity {
     private ActivityAnalysisBinding activityAnalysisBinding;

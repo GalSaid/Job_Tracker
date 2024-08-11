@@ -90,34 +90,34 @@ public class ActivityProfile extends DrawerBaseActivity {
             profile_EDT_description.setText(user.getDescription());
             previousPdfUrl =user.getPdfCV();
             previousWordUrl =user.getWordCV();
-            if(previousPdfUrl !=null && !previousPdfUrl.isEmpty())
+            if(previousPdfUrl !=null && !previousPdfUrl.isEmpty()) //Show the pdf  cv file name if it exists
                 profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousPdfUrl)));
             else
                 profile_LAYOT_pdf.setVisibility(View.GONE);
 
-            if(previousWordUrl !=null && !previousWordUrl.isEmpty())
+            if(previousWordUrl !=null && !previousWordUrl.isEmpty()) //Show the word cv file name if it exists
                 profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(Uri.parse(previousWordUrl)));
             else
                 profile_LAYOT_word.setVisibility(View.GONE);
         });
         profile_LAYOT_pdf.setOnClickListener(v -> {
-            if(editMode)
-                uploadPdfCV();
+            if(editMode) //If in edit mode, can upload a new pdf cv
+                StorageManager.getInstance().uploadPdfCV(launcherPdf);
             else
-                viewPdf();
+                viewPdf(); //If not in edit mode, can view the pdf cv
         });
         profile_LAYOT_word.setOnClickListener(v -> {
-            if (editMode)
-                uploadWordCV();
+            if (editMode) //If in edit mode, can upload a new word cv
+                StorageManager.getInstance().uploadWordCV(launcherWord);
             else
-                viewWord();
+                viewWord(); //If not in edit mode, can view the word cv
         });
-        noEditMode();
+        noEditMode(); //Initially not in edit mode
         profile_IMAGEVIEW_edit.setOnClickListener(v -> {
           moveToEditMode();
         });
         profile_BTN_update.setOnClickListener(v -> {
-            updateProfile();
+            updateProfile(); //Save the updated profile
         });
     }
 
@@ -159,13 +159,15 @@ public class ActivityProfile extends DrawerBaseActivity {
         if(valid){
             profile_progress_bar.setVisibility(View.VISIBLE);
             MyDbManager.getInstance().getUser(user->{
+                if(user==null)
+                   Toast.makeText(ActivityProfile.this, "User not found",Toast.LENGTH_SHORT).show();
                 user.setName(name);
                 user.setPhoneNumber(phone);
                 user.setDescription(description);
-                if(uri_pdf!=null){
+                if(uri_pdf!=null){ //update the new pdf cv
                     StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
                 }
-                if(uri_word!=null){
+                if(uri_word!=null){ //update the new word cv
                     StorageManager.getInstance().uploadWordCVToFB(uri_word);
                 }
                 FirebaseDatabase.getInstance().getReference("Users")
@@ -177,7 +179,7 @@ public class ActivityProfile extends DrawerBaseActivity {
                                     Toast.makeText(ActivityProfile.this, "Successfully updated",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(ActivityProfile.this, "User failed to register",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ActivityProfile.this, "The user has not been updated",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -190,7 +192,7 @@ public class ActivityProfile extends DrawerBaseActivity {
             Intent data=result.getData();
             if(data!=null && data.getData()!=null){
                 uri_pdf=data.getData();
-                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(uri_pdf));
+                profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(uri_pdf)); //Show the new pdf cv file name
             }
         }
     });
@@ -200,34 +202,19 @@ public class ActivityProfile extends DrawerBaseActivity {
             Intent data=result.getData();
             if(data!=null && data.getData()!=null){
                 uri_word=data.getData();
-                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(uri_word));
+                profile_LBL_wordName.setText(StorageManager.getInstance().getFileName(uri_word)); //Show the new word cv file name
             }
         }
     });
 
-    private void uploadWordCV(){
-        Intent intent = new Intent();
-        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcherWord.launch(Intent.createChooser(intent, "Select WORD"));
-    }
-
-
-    private void uploadPdfCV(){
-        Intent intent = new Intent();
-        intent.setType("application/pdf");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcherPdf.launch(Intent.createChooser(intent, "Select PDF"));
-    }
-
-    private void viewPdf(){
+    private void viewPdf(){ //view the pdf cv
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/pdf");
         intent.setData(Uri.parse(previousPdfUrl));
         startActivity(intent);
     }
 
-    private void viewWord(){
+    private void viewWord(){ //view the word cv`
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         intent.setData(Uri.parse(previousWordUrl));

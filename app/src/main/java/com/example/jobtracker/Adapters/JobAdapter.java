@@ -17,7 +17,6 @@ import com.example.jobtracker.Utilities.ImageLoader;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobViewHolder> {

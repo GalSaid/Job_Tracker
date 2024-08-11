@@ -3,14 +3,11 @@ package com.example.jobtracker.Views;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +28,6 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class ActivityMyApplications extends DrawerBaseActivity {
     private RecyclerView list_LST_applications;
@@ -39,6 +35,8 @@ public class ActivityMyApplications extends DrawerBaseActivity {
     private ApplicationAdapter appAdapter;
     private TextInputEditText event_EDT_date;
     private ArrayList<Application> applications;
+    private ProgressBar progress_bar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +51,15 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         loadApplications();
     }
 
-    private void loadApplications() {
+    private void loadApplications() { //load all applications from firebase
+        progress_bar.setVisibility(ProgressBar.VISIBLE);
         MyDbManager.getInstance().getAllApplications(apps -> {
+            if (apps.isEmpty())
+                Toast.makeText(this, "No applications found", Toast.LENGTH_SHORT).show();
             applications.clear();
             applications.addAll(apps);
             appAdapter.notifyDataSetChanged();
+            progress_bar.setVisibility(ProgressBar.GONE);
         });
     }
 
@@ -71,12 +73,12 @@ public class ActivityMyApplications extends DrawerBaseActivity {
 
         appAdapter.setApplicationCallback(new ApplicationCallback() {
             @Override
-            public void addEvent(Application app, int position, AppEvent event) {
+            public void addEvent(Application app, int position, AppEvent event) { //add new event to specific application
                 openEvent(app, event);
             }
 
             @Override
-            public void updateReturnStatus(boolean isChecked, Application app, int position) {
+            public void updateReturnStatus(boolean isChecked, Application app, int position) { //update the return status of the application
                 app.setReturned(isChecked);
                 MyDbManager.getInstance().updateApplication(app, app.getStatus());
 
@@ -89,7 +91,7 @@ public class ActivityMyApplications extends DrawerBaseActivity {
     }
 
 
-    private void openEvent(Application app, AppEvent event) {
+    private void openEvent(Application app, AppEvent event) { //for new event or edit existing event
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_edit_event, null);
         MaterialTextView event_LBL_title = dialogView.findViewById(R.id.event_LBL_title);
         TextInputLayout event_layout_EDT_title_description = dialogView.findViewById(R.id.event_layout_EDT_title_description);
@@ -100,7 +102,7 @@ public class ActivityMyApplications extends DrawerBaseActivity {
         event_EDT_date = dialogView.findViewById(R.id.event_EDT_date);
         MaterialButton event_BTN_save = dialogView.findViewById(R.id.event_BTN_save);
 
-        event_EDT_date.setOnClickListener(v -> {
+        event_EDT_date.setOnClickListener(v -> { //show date picker dialog of choosing the date
             showDatePickerDialog();
         });
 
@@ -119,7 +121,7 @@ public class ActivityMyApplications extends DrawerBaseActivity {
                 .setView(dialogView)
                 .create();
 
-        event_BTN_save.setOnClickListener(v -> {
+        event_BTN_save.setOnClickListener(v -> { //save the event
             event_layout_EDT_title_description.setError(null);
             event_layout_EDT_description.setError(null);
             event_layout_EDT_date.setError(null);
@@ -145,7 +147,7 @@ public class ActivityMyApplications extends DrawerBaseActivity {
             }
             if (valid) {
                 if (event == null)
-                    //save the event
+                    //save the new event
                     addNewEvent(app, title, description, date);
                 else {
                     //edit the event

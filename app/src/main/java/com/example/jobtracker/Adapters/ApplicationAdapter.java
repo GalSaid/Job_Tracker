@@ -4,7 +4,6 @@ package com.example.jobtracker.Adapters;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,9 +75,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AppViewHolder holder, int position) {
-        Log.d("Gali", "onBindViewHolder: " + position);
         Application app = getItem(position);
-        MyDbManager.getInstance().getSpecificJob(app.getJobId(), job -> {
+        MyDbManager.getInstance().getSpecificJob(app.getJobId(), job -> { //get the job details
             holder.application_LBL_title.setText(job.getName());
             holder.application_LBL_location.setText(job.getLocation());
         });
@@ -120,7 +118,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         // Create an instance of the child
         // item view adapter and set its
         // adapter, layout manager and RecyclerViewPool
-        AppEventAdapter childItemAdapter
+        AppEventAdapter childItemAdapter //all the event of specific application
                 = new AppEventAdapter(
                 MyDbManager.getInstance().convertEventsHashMapToArrayList(app.getAllEvents()));
         childItemAdapter.setAppEventCallback((event, pos) -> {
@@ -167,7 +165,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             application_LBL_date = itemView.findViewById(R.id.application_LBL_date);
             application_SPINNER_status = itemView.findViewById(R.id.application_SPINNER_status);
 
-            application_SPINNER_status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            application_SPINNER_status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //change the status of the application
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     String selectedStatus = (String) parentView.getItemAtPosition(position);
@@ -177,7 +175,6 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     String oldStatus = app.getStatus();
                     if (!oldStatus.equals(selectedStatus)) {
                         app.setStatus(selectedStatus);
-                        Log.d("Gali","here1");
                         MyDbManager.getInstance().updateApplication(app,oldStatus);
                     }
                 }
@@ -194,7 +191,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     = itemView
                     .findViewById(
                             R.id.list_LST_events);
-            application_IMAGEVIEW_plus.setOnClickListener(v -> { //Show all the details of the job
+            application_IMAGEVIEW_plus.setOnClickListener(v -> { //add new event to the application
                 if (appCallback != null) {
                     appCallback.addEvent(getItem(getAdapterPosition()),getAdapterPosition(),null);
                 }

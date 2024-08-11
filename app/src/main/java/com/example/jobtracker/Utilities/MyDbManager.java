@@ -1,10 +1,7 @@
 package com.example.jobtracker.Utilities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,21 +11,16 @@ import com.example.jobtracker.Model.Application;
 import com.example.jobtracker.Model.Job;
 import com.example.jobtracker.Model.User;
 import com.example.jobtracker.R;
-import com.example.jobtracker.Views.ActivityRegister;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.checkerframework.checker.units.qual.A;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -59,7 +51,7 @@ public class MyDbManager {
         }
     }
 
-    public void createJobsAndLoadToDB() {
+    public void createJobsAndLoadToDB() { // This method is used to create jobs and load them to the database for testing purposes
         HashMap<String, Job> jobs = new HashMap<>();
         jobs.put("j1", new Job(
                 "Software Developer",
@@ -202,19 +194,6 @@ public class MyDbManager {
         jobsRef.setValue(jobs);
     }
 
-    public void updateJobCompanyImage(String jobId, String imageUrl, CallBack callBack) {
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference(JOB_TABLE);
-
-        usersRef.child(jobId).child("companyImg").setValue(imageUrl)
-                .addOnSuccessListener(unused -> {
-                    if (callBack != null)
-                        callBack.res(null);
-                });
-    }
-
-
     public ArrayList<AppEvent> convertEventsHashMapToArrayList(HashMap<String, AppEvent> hashMap) {
         return new ArrayList<>(hashMap.values());
     }
@@ -232,35 +211,8 @@ public class MyDbManager {
     }
 
 
-//    public void getUserImage(CallBack<String> callBack) {
-//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        getUserImage(userUid, callBack);
-//    }
 
-    public void getJobCompanyImage(String jobId, CallBack<String> callBack) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference(JOB_TABLE);
-
-        usersRef.child(jobId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Job job = snapshot.getValue(Job.class);
-
-                if (job != null) {
-                    callBack.res(job.getCompanyImg());
-                } else {
-                    callBack.res(null);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public void getPdfCVName(CallBack<String> callBack) {
+    public void getPdfCVName(CallBack<String> callBack) { // Get the name of the PDF CV file
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -281,7 +233,7 @@ public class MyDbManager {
         });
     }
 
-    public void getWordCVName(CallBack<String> callBack) {
+    public void getWordCVName(CallBack<String> callBack) { // Get the name of the Word CV file
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -310,7 +262,6 @@ public class MyDbManager {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting jobs", task.getException());
                     callBack.res(new ArrayList<>()); // Handle error by sending an empty list
                 } else {
                     ArrayList<Job> jobs = new ArrayList<>();
@@ -325,64 +276,6 @@ public class MyDbManager {
         });
     }
 
-//    public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference usersRef = database.getReference(USERS_TABLE);
-//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        usersRef.child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User user = snapshot.getValue(User.class);
-//
-//                if (user != null) {
-//                    ArrayList<Application> apps = new ArrayList<>();
-//                    CallBack<Application> callBackApp=new CallBack<Application>() {
-//                        @Override
-//                        public void res(Application res) {
-//                            apps.add(res);
-//                        }
-//                    };
-//                   for(String appId : user.getMyApplications().keySet()){
-//                       getApplication(appId, callBackApp);
-//                   }
-//                    callBack.res(apps);
-//                } else {
-//                    callBack.res(null);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
-
-    //    public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
-//
-//        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid).child("myApplications");
-//
-//        usersRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                ArrayList<Application> applications = new ArrayList<>();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Application app = snapshot.getValue(Application.class);
-//                    applications.add(app);
-//                }
-//                callBack.res(applications); // Pass the retrieved list to the callback
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(context, "Failed to retrieve applications: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
     public void getAllApplications(CallBack<ArrayList<Application>> callBack) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -419,6 +312,7 @@ public class MyDbManager {
                 });
     }
 
+    //When the user add new application -> update of the number of jobs he has submitted and they are in a pending status
     public void increasePendingCount(String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
@@ -443,6 +337,8 @@ public class MyDbManager {
         });
     }
 
+
+    //When the user changes the status of an application, the variables for the analysis are also updated
     public void updateCountStatus(String statusToreduce, String statusToIncrease) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
@@ -454,7 +350,6 @@ public class MyDbManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer currentIncreaseCount = snapshot.child(getStatusString(statusToIncrease)).getValue(Integer.class);
                 Integer currentReduceCount = snapshot.child(getStatusString(statusToreduce)).getValue(Integer.class);
-                Log.d("FF","currentIncreaseCount: "+currentIncreaseCount);
                 if(currentIncreaseCount==null)
                     currentIncreaseCount=0;
                 if(currentReduceCount==null)
@@ -492,6 +387,7 @@ public class MyDbManager {
         }
     }
 
+    //Updates the application and its status
     public void updateApplication(Application app, String oldStatus) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -503,10 +399,6 @@ public class MyDbManager {
                     if(!oldStatus.equals(app.getStatus()))
                         updateCountStatus(oldStatus, app.getStatus());
                 });
-    }
-
-    public interface OnAppUpdateListener {
-        void onSuccess();
     }
 
 
@@ -521,32 +413,7 @@ public class MyDbManager {
 
     }
 
-
-//    public void getApplication(String appId, CallBack<Application> callBack) {
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference appsRef = database.getReference(APPLICATION_TABLE);
-//        appsRef.child(appId).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Application app = snapshot.getValue(Application.class);
-//
-//                if (app != null) {
-//                    callBack.res(app);
-//                } else {
-//                    callBack.res(null);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
-
-    public void getStatusCount(getCountStatus callBack) {
+    public void getStatusCount(getCountStatus callBack) { //For activityAnalysis
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
@@ -555,8 +422,10 @@ public class MyDbManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if(user==null)
+                if(user==null){
                     callBack.res(0,0,0,0);
+                    Toast.makeText(context, "There is no user with this id", Toast.LENGTH_SHORT).show();
+                }
                 else
                     callBack.res(user.getTotalPending(),user.getTotalAccepted(),user.getTotalRejected(),user.getTotalInProcess());
             }
@@ -609,23 +478,4 @@ public class MyDbManager {
             }
         });
     }
-
-    public void getJobStatus(String jobId, CallBack<Boolean> callBack) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference jobsRef = database.getReference(JOB_TABLE).child(jobId);
-
-        jobsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean active = snapshot.child("active").getValue(boolean.class);
-                callBack.res(active);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "There is no job " + jobId, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 }

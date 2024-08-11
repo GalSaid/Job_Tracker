@@ -43,14 +43,14 @@ public class ActivityWelcome extends AppCompatActivity {
     }
 
 
-    private void moveToLogin(){
+    private void moveToLogin(){ // Move to login activity option
         Intent i = new Intent(getApplicationContext(), ActivityLogin.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);
         startActivity(i);
     }
 
-    private void moveToRegister(){
+    private void moveToRegister(){  // Move to register activity option
         Intent i = new Intent(getApplicationContext(), ActivityRegister.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);

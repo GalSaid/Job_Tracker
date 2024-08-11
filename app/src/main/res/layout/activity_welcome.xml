@@ -32,7 +32,7 @@
             android:textColor="@color/title_color"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="JOB TRACKER" />
+            android:text="@string/job_tracker" />
 
         <View
             android:layout_width="wrap_content"
@@ -45,14 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="8dp"
-            android:text="Login"/>
+            android:text="@string/login"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/welcome_BTN_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:text="Register"/>
+            android:text="@string/register"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

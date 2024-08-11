@@ -79,12 +79,12 @@ public class ActivityRegister extends AppCompatActivity {
 
     private void initViews(){
         register_BTN_register.setOnClickListener((v) -> register());
-        btn_pdf.setOnClickListener((v) -> uploadPdfCV());
-        btn_word.setOnClickListener((v) -> uploadWordCV());
+        btn_pdf.setOnClickListener((v) -> StorageManager.getInstance().uploadPdfCV(launcherPdf));
+        btn_word.setOnClickListener((v) -> StorageManager.getInstance().uploadWordCV(launcherWord));
     }
 
 
-    private ActivityResultLauncher<Intent> launcherPdf=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> launcherPdf=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if(result.getResultCode()==RESULT_OK && result.getData()!=null){
             Intent data=result.getData();
             if(data!=null && data.getData()!=null){
@@ -94,7 +94,7 @@ public class ActivityRegister extends AppCompatActivity {
         }
     });
 
-    private ActivityResultLauncher<Intent> launcherWord= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> launcherWord= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if(result.getResultCode()==RESULT_OK && result.getData()!=null){
             Intent data=result.getData();
             if(data!=null && data.getData()!=null){
@@ -104,20 +104,6 @@ public class ActivityRegister extends AppCompatActivity {
         }
     });
 
-    private void uploadWordCV(){
-        Intent intent = new Intent();
-        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcherWord.launch(Intent.createChooser(intent, "Select WORD"));
-    }
-
-
-    private void uploadPdfCV(){
-        Intent intent = new Intent();
-        intent.setType("application/pdf");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        launcherPdf.launch(Intent.createChooser(intent, "Select PDF"));
-    }
 
     private void register(){
         layout_EDT_phone.setError(null);
@@ -198,7 +184,7 @@ public class ActivityRegister extends AppCompatActivity {
         }
     }
 
-    private void moveToAllJobs(){
+    private void moveToAllJobs(){ //move to job board activity if the user registered successfully
         Intent i = new Intent(getApplicationContext(), ActivityJobBoard.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);

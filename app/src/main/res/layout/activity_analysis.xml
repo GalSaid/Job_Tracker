@@ -34,7 +34,6 @@
             <!--Pie chart to display the data-->
 
             <org.eazegraph.lib.charts.PieChart
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/piechart"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -236,7 +235,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/_0"
                     android:id="@+id/analysis_LBL_inProcess"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
@@ -272,7 +271,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/_0"
                     android:id="@+id/analysis_LBL_rejected"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
@@ -308,7 +307,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/_0"
                     android:id="@+id/analysis_LBL_accepted"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"

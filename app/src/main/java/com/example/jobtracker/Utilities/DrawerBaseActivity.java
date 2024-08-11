@@ -27,6 +27,7 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
 
     DrawerLayout drawerLayout;
 
+    //For the menu with the options
     @Override
     public void setContentView(View view) {
         drawerLayout=(DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer_base, null);
@@ -45,20 +46,20 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-        if(item.getItemId()==R.id.nav_allJobs){
+        if(item.getItemId()==R.id.nav_allJobs){ //if the user clicks on the all jobs option
             startActivity(new Intent(this, ActivityJobBoard.class));
             overridePendingTransition(0,0);
         }
-        else if(item.getItemId()== R.id.nav_myApplications){
+        else if(item.getItemId()== R.id.nav_myApplications){//if the user clicks on the my applications option
             startActivity(new Intent(this, ActivityMyApplications.class));
             overridePendingTransition(0,0);
         } else if (item.getItemId() == R.id.nav_profile) {
             startActivity(new Intent(this, ActivityProfile.class));
             overridePendingTransition(0, 0);
-        } else if(item.getItemId()==R.id.nav_logout){
+        } else if(item.getItemId()==R.id.nav_logout){//if the user clicks on the logout option
             logOut();
         }
-        else if (item.getItemId() == R.id.nav_analysis) {
+        else if (item.getItemId() == R.id.nav_analysis) {//if the user clicks on the analysis option
             startActivity(new Intent(this, ActivityAnalysis.class));
             overridePendingTransition(0, 0);
         }
