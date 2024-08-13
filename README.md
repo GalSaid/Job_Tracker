@@ -1,4 +1,4 @@
-<img src="https://github.com/user-attachments/assets/d755b9dd-e2b5-4566-90d9-c49247aea281" width="500"/>
+<img src="https://github.com/user-attachments/assets/d755b9dd-e2b5-4566-90d9-c49247aea281" width="400"/>
 
 
 # Job-Tracker-App
