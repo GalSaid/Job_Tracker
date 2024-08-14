@@ -90,7 +90,6 @@ public class ActivityProfile extends DrawerBaseActivity {
             profile_EDT_phone.setText(user.getPhoneNumber());
             profile_EDT_description.setText(user.getDescription());
             currentPdfUrl =user.getPdfCV();
-            Log.d("pttt", "initViews: "+currentPdfUrl);
             currentWordUrl =user.getWordCV();
             if(currentPdfUrl !=null && !currentPdfUrl.isEmpty()) //Show the pdf  cv file name if it exists
                 profile_LBL_pdfName.setText(StorageManager.getInstance().getFileName(Uri.parse(currentPdfUrl)));
@@ -224,8 +223,6 @@ public class ActivityProfile extends DrawerBaseActivity {
             Toast.makeText(this, "There is no file",Toast.LENGTH_SHORT).show();
             return;
         }
-        Log.d("pttt", "viewPdf: "+currentPdfUrl);
-        Log.d("pttt", "viewPdf uri: "+Uri.parse(currentPdfUrl));
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/pdf");
         intent.setData(Uri.parse(currentPdfUrl));

@@ -2,6 +2,7 @@ package com.example.jobtracker.Utilities;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
