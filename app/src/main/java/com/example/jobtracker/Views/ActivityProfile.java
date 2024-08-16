@@ -168,11 +168,13 @@ public class ActivityProfile extends DrawerBaseActivity {
                 if(uri_pdf!=null){ //update the new pdf cv
                     StorageManager.getInstance().uploadPdfCVToFB(uri_pdf, uriString->{
                         currentPdfUrl=uriString;
+                        uri_pdf=null;
                     });
                 }
                 if(uri_word!=null){ //update the new word cv
                     StorageManager.getInstance().uploadWordCVToFB(uri_word, uriString->{
                         currentWordUrl=uriString;
+                        uri_word=null;
                     });
                 }
                 FirebaseDatabase.getInstance().getReference("Users")
@@ -223,6 +225,10 @@ public class ActivityProfile extends DrawerBaseActivity {
             Toast.makeText(this, "There is no file",Toast.LENGTH_SHORT).show();
             return;
         }
+        if(uri_pdf!=null){ //after finishing uploading the file, the temporary url is null
+            Toast.makeText(this, "Still uploading the file...",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setType("application/pdf");
         intent.setData(Uri.parse(currentPdfUrl));
@@ -232,6 +238,10 @@ public class ActivityProfile extends DrawerBaseActivity {
     private void viewWord(){ //view the word cv
         if(currentWordUrl==null || currentWordUrl.isEmpty()){
             Toast.makeText(this, "There is no file",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(uri_word!=null){ //after finishing uploading the file, the temporary url is null
+            Toast.makeText(this, "Still uploading the file...",Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);

@@ -2,7 +2,8 @@ package com.example.jobtracker.Utilities;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,13 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MyDbManager {
 
-    private static Context context;
+    private Context context;
     private static volatile MyDbManager instance;
     private final String JOB_TABLE = "Jobs";
     private final String USERS_TABLE = "Users";
@@ -199,20 +199,6 @@ public class MyDbManager {
         return new ArrayList<>(hashMap.values());
     }
 
-    public interface CallBack<T> {
-        void res(T res);
-    }
-
-    public interface CallBackMove {
-        void res();
-    }
-
-    public interface getCountStatus{
-        void res(int countPending, int countAccepted, int countRejected, int countInProcess);
-    }
-
-
-
     public void getPdfCVName(CallBack<String> callBack) { // Get the name of the PDF CV file
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
@@ -255,7 +241,6 @@ public class MyDbManager {
         });
     }
 
-
     public void getAllJobs(CallBack<ArrayList<Job>> callBack) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference jobsRef = database.getReference(JOB_TABLE);
@@ -295,7 +280,9 @@ public class MyDbManager {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "Failed to retrieve applications: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(context, "Failed to retrieve applications: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }
@@ -306,7 +293,9 @@ public class MyDbManager {
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         usersRef.child(userId).child("myApplications").child(app.getJobId()).setValue(app)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to add application", Toast.LENGTH_SHORT).show();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Failed to add application", Toast.LENGTH_SHORT).show()
+                    );
                 }).addOnSuccessListener(unused -> {
                     callBack.res();
                     increasePendingCount(userId);
@@ -326,18 +315,21 @@ public class MyDbManager {
 
                 usersRef.child(userId).child(getStatusString(context.getString(R.string.pending))).setValue(currentCountOfPending + 1)
                         .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Failed to update status pending", Toast.LENGTH_SHORT).show();
+                            new Handler(Looper.getMainLooper()).post(() ->
+                                    Toast.makeText(context, "Failed to update status pending", Toast.LENGTH_SHORT).show()
+                            );
                         });
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show();
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }
-
 
     //When the user changes the status of an application, the variables for the analysis are also updated
     public void updateCountStatus(String statusToreduce, String statusToIncrease) {
@@ -351,30 +343,36 @@ public class MyDbManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer currentIncreaseCount = snapshot.child(getStatusString(statusToIncrease)).getValue(Integer.class);
                 Integer currentReduceCount = snapshot.child(getStatusString(statusToreduce)).getValue(Integer.class);
-                if(currentIncreaseCount==null)
-                    currentIncreaseCount=0;
-                if(currentReduceCount==null)
-                    currentReduceCount=0;
+                if (currentIncreaseCount == null)
+                    currentIncreaseCount = 0;
+                if (currentReduceCount == null)
+                    currentReduceCount = 0;
                 usersRef.child(userUid).child(getStatusString(statusToIncrease)).setValue(currentIncreaseCount + 1)
                         .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Failed to update status "+statusToIncrease, Toast.LENGTH_SHORT).show();
+                            new Handler(Looper.getMainLooper()).post(() ->
+                                    Toast.makeText(context, "Failed to update status " + statusToIncrease, Toast.LENGTH_SHORT).show()
+                            );
                         });
 
                 usersRef.child(userUid).child(getStatusString(statusToreduce)).setValue(currentReduceCount - 1)
                         .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Failed to update status "+statusToreduce, Toast.LENGTH_SHORT).show();
+                            new Handler(Looper.getMainLooper()).post(() ->
+                                    Toast.makeText(context, "Failed to update status " + statusToreduce, Toast.LENGTH_SHORT).show()
+                            );
                         });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show();
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(context, "Failed to retrieve counts", Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }
 
-    private String getStatusString(String status){
-        switch (status){
+    private String getStatusString(String status) {
+        switch (status) {
             case "Pending":
                 return "totalPending";
             case "Accepted":
@@ -395,13 +393,14 @@ public class MyDbManager {
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         usersRef.child(userUid).child("myApplications").child(app.getJobId()).setValue(app)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to update application", Toast.LENGTH_SHORT).show();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Failed to update application", Toast.LENGTH_SHORT).show()
+                    );
                 }).addOnSuccessListener(unused -> {
-                    if(!oldStatus.equals(app.getStatus()))
+                    if (!oldStatus.equals(app.getStatus()))
                         updateCountStatus(oldStatus, app.getStatus());
                 });
     }
-
 
     public void addOrUpdateEvent(Application app, AppEvent event) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -409,7 +408,9 @@ public class MyDbManager {
         DatabaseReference usersRef = database.getReference(USERS_TABLE);
         usersRef.child(userUid).child("myApplications").child(app.getJobId()).child("allEvents").child(event.getId()).setValue(event)
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to add event", Toast.LENGTH_SHORT).show();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Failed to add event", Toast.LENGTH_SHORT).show()
+                    );
                 });
 
     }
@@ -423,12 +424,13 @@ public class MyDbManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if(user==null){
-                    callBack.res(0,0,0,0);
-                    Toast.makeText(context, "There is no user with this id", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    callBack.res(user.getTotalPending(),user.getTotalAccepted(),user.getTotalRejected(),user.getTotalInProcess());
+                if (user == null) {
+                    callBack.res(0, 0, 0, 0);
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "There is no user with this id", Toast.LENGTH_SHORT).show()
+                    );
+                } else
+                    callBack.res(user.getTotalPending(), user.getTotalAccepted(), user.getTotalRejected(), user.getTotalInProcess());
             }
 
             @Override
@@ -437,6 +439,7 @@ public class MyDbManager {
             }
         });
     }
+
     public void getUser(CallBack<User> callBack) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -456,7 +459,7 @@ public class MyDbManager {
         });
     }
 
-    public void getSpecificApplication(String jobId,CallBack<Application> callBack ) { //For activityAnalysis
+    public void getSpecificApplication(String jobId, CallBack<Application> callBack) { //For activityAnalysis
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid);
@@ -492,7 +495,9 @@ public class MyDbManager {
                 if (job != null) {
                     callBack.res(job);
                 } else {
-                    Toast.makeText(context, "There is no job " + jobId, Toast.LENGTH_SHORT).show();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "There is no job " + jobId, Toast.LENGTH_SHORT).show()
+                    );
                     callBack.res(null);
                 }
             }
@@ -502,5 +507,17 @@ public class MyDbManager {
 
             }
         });
+    }
+
+    public interface CallBack<T> {
+        void res(T res);
+    }
+
+    public interface CallBackMove {
+        void res();
+    }
+
+    public interface getCountStatus {
+        void res(int countPending, int countAccepted, int countRejected, int countInProcess);
     }
 }

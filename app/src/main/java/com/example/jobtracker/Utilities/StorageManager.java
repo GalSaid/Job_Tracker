@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.OpenableColumns;
 import android.widget.Toast;
 
@@ -47,8 +49,8 @@ public class StorageManager {
 
     private StorageManager(Context context) {
         this.context = context;
-        this.storageReference= FirebaseStorage.getInstance().getReference();
-        this.databaseReference= FirebaseDatabase.getInstance().getReference(USERS_TABLE);
+        this.storageReference = FirebaseStorage.getInstance().getReference();
+        this.databaseReference = FirebaseDatabase.getInstance().getReference(USERS_TABLE);
     }
 
     public static StorageManager getInstance() {
@@ -56,74 +58,80 @@ public class StorageManager {
     }
 
 
-    public static void init(Context context){
-        if (instance == null){
-            synchronized (ImageLoader.class){
-                if (instance == null){
+    public static void init(Context context) {
+        if (instance == null) {
+            synchronized (ImageLoader.class) {
+                if (instance == null) {
                     instance = new StorageManager(context);
                 }
             }
         }
     }
 
-    public void uploadPdfCVToFB(Uri data ,GetNewUrlStringCallback callback){
+    public void uploadPdfCVToFB(Uri data, GetNewUrlStringCallback callback) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        MyDbManager.getInstance().getPdfCVName(filename->{
-           String pdfFileName=filename;
-            StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
+        MyDbManager.getInstance().getPdfCVName(filename -> {
+            String pdfFileName = filename;
+            StorageReference reference = storageReference.child(userUid + "/" + getFileName(data));
             reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask= taskSnapshot.getStorage().getDownloadUrl();
-                    while(!uriTask.isComplete());
-                    Uri uri= uriTask.getResult();
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isComplete()) ;
+                    Uri uri = uriTask.getResult();
                     databaseReference.child(userUid).child("pdfCV").setValue(uri.toString());
-                    if(callback!=null)
+                    if (callback != null)
                         callback.res(uri.toString());
-                    if(pdfFileName!=null){ //if the user has already uploaded a pdf file, delete it from the storage
-                        StorageReference ref= storageReference.child(userUid+"/"+pdfFileName);
+                    if (pdfFileName != null) { //if the user has already uploaded a pdf file, delete it from the storage
+                        StorageReference ref = storageReference.child(userUid + "/" + pdfFileName);
                         ref.delete();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Failed to upload pdf file to storage",Toast.LENGTH_SHORT).show();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Failed to upload pdf file to storage", Toast.LENGTH_SHORT).show()
+                    );
                 }
             });
         });
     }
 
-    public void uploadPdfCVToFB(Uri data){
+    public void uploadPdfCVToFB(Uri data) {
         uploadPdfCVToFB(data, null);
     }
-    public void uploadWordCVToFB(Uri data){
+
+    public void uploadWordCVToFB(Uri data) {
         uploadWordCVToFB(data, null);
     }
 
-    public void uploadWordCVToFB(Uri data, GetNewUrlStringCallback callback){
+    public void uploadWordCVToFB(Uri data, GetNewUrlStringCallback callback) {
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        MyDbManager.getInstance().getWordCVName(filename->{
-            String wordFileName=filename;
-            StorageReference reference= storageReference.child(userUid+"/"+getFileName(data));
+        MyDbManager.getInstance().getWordCVName(filename -> {
+            String wordFileName = filename;
+            StorageReference reference = storageReference.child(userUid + "/" + getFileName(data));
             reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask= taskSnapshot.getStorage().getDownloadUrl();
-                    while(!uriTask.isComplete());
-                    Uri uri= uriTask.getResult();
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isComplete()) ;
+                    Uri uri = uriTask.getResult();
                     databaseReference.child(userUid).child("wordCV").setValue(uri.toString());
-                    if(callback!=null)
+                    if (callback != null)
                         callback.res(uri.toString());
-                    if(wordFileName!=null){ //if the user has already uploaded a word file, delete it from the storage
-                        StorageReference ref= storageReference.child(userUid+"/"+wordFileName);
+                    if (wordFileName != null) { //if the user has already uploaded a word file, delete it from the storage
+                        StorageReference ref = storageReference.child(userUid + "/" + wordFileName);
                         ref.delete();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "Failed to upload word file to storage",Toast.LENGTH_SHORT).show();
+                    // Ensure Toast is shown on the main thread
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Failed to upload word file to storage", Toast.LENGTH_SHORT).show()
+                    );
                 }
             });
         });
@@ -190,15 +198,13 @@ public class StorageManager {
                         }
                     }
                 } else {
-                    if (callback != null) {
-                        Toast.makeText(context, "Failed to download the file", Toast.LENGTH_SHORT).show();
-                    }
+                    callback.onSuccess(null);
                 }
             }
         });
     }
 
-    public void uploadWordCV(ActivityResultLauncher<Intent> launcher){ //choose which word file to upload
+    public void uploadWordCV(ActivityResultLauncher<Intent> launcher) { //choose which word file to upload
         Intent intent = new Intent();
         intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -206,7 +212,7 @@ public class StorageManager {
     }
 
 
-    public void uploadPdfCV(ActivityResultLauncher<Intent> launcher){ //choose which pdf file to upload
+    public void uploadPdfCV(ActivityResultLauncher<Intent> launcher) { //choose which pdf file to upload
         Intent intent = new Intent();
         intent.setType("application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);
