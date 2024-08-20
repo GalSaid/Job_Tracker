@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.jobtracker.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ActivitySplash extends AppCompatActivity {
 
@@ -67,7 +69,19 @@ public class ActivitySplash extends AppCompatActivity {
     }
 
     private void animationDone() {
-        openWelcomeActivity();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser==null) { // No user is signed in
+            openWelcomeActivity();
+        } else {  // User is signed in
+            openJobBoardActivity();
+        }
+    }
+
+    private void openJobBoardActivity() {
+        Intent intent = new Intent(this, ActivityJobBoard.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
+        finish();
     }
 
     private void openWelcomeActivity() {
