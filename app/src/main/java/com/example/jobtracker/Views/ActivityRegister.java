@@ -163,9 +163,9 @@ public class ActivityRegister extends AppCompatActivity {
                                         if(task.isSuccessful()){
                                             Toast.makeText(ActivityRegister.this, "User registered Successfully",Toast.LENGTH_SHORT).show();
                                             moveToAllJobs();
-                                            if(uri_pdf!=null)
+                                            if(uri_pdf!=null) //the user uploaded his pdf CV
                                                 StorageManager.getInstance().uploadPdfCVToFB(uri_pdf);
-                                            if(uri_word!=null)
+                                            if(uri_word!=null) //the user uploaded his word CV
                                                 StorageManager.getInstance().uploadWordCVToFB(uri_word);
                                         }
                                         else{

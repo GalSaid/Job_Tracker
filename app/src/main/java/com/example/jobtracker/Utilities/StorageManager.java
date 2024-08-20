@@ -40,9 +40,7 @@ import okhttp3.Response;
 public class StorageManager {
     private static Context context;
     private static volatile StorageManager instance;
-    private final String JOB_TABLE = "Jobs";
     private final String USERS_TABLE = "Users";
-    private final String APPLICATION_TABLE = "Apps";
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
 
@@ -68,7 +66,7 @@ public class StorageManager {
         }
     }
 
-    public void uploadPdfCVToFB(Uri data, GetNewUrlStringCallback callback) {
+    public void uploadPdfCVToFB(Uri data, GetNewUrlStringCallback callback) { //upload the pdf file to the storage ans save the download url in the database
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         MyDbManager.getInstance().getPdfCVName(filename -> {
             String pdfFileName = filename;
@@ -98,15 +96,15 @@ public class StorageManager {
         });
     }
 
-    public void uploadPdfCVToFB(Uri data) {
+    public void uploadPdfCVToFB(Uri data) { //for the register activity
         uploadPdfCVToFB(data, null);
     }
 
-    public void uploadWordCVToFB(Uri data) {
+    public void uploadWordCVToFB(Uri data) { //for the register activity
         uploadWordCVToFB(data, null);
     }
 
-    public void uploadWordCVToFB(Uri data, GetNewUrlStringCallback callback) {
+    public void uploadWordCVToFB(Uri data, GetNewUrlStringCallback callback) { //upload the word file to the storage and save the download url in the database
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         MyDbManager.getInstance().getWordCVName(filename -> {
             String wordFileName = filename;

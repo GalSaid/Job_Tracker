@@ -168,13 +168,13 @@ public class ActivityProfile extends DrawerBaseActivity {
                 if(uri_pdf!=null){ //update the new pdf cv
                     StorageManager.getInstance().uploadPdfCVToFB(uri_pdf, uriString->{
                         currentPdfUrl=uriString;
-                        uri_pdf=null;
+                        uri_pdf=null; //delete the temporary uri
                     });
                 }
                 if(uri_word!=null){ //update the new word cv
                     StorageManager.getInstance().uploadWordCVToFB(uri_word, uriString->{
                         currentWordUrl=uriString;
-                        uri_word=null;
+                        uri_word=null; //delete the temporary uri
                     });
                 }
                 FirebaseDatabase.getInstance().getReference("Users")

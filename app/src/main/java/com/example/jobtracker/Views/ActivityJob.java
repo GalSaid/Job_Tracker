@@ -260,7 +260,7 @@ public class ActivityJob extends AppCompatActivity {
             Toast.makeText(this, "Job id is null", Toast.LENGTH_SHORT).show();
     }
 
-    private void moveToMyApplications() {
+    private void moveToMyApplications() { //after the user applied to job, move to my applications
         Intent i = new Intent(getApplicationContext(), ActivityMyApplications.class);
         Bundle bundle = new Bundle();
         i.putExtras(bundle);

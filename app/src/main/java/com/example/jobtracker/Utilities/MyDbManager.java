@@ -459,7 +459,7 @@ public class MyDbManager {
         });
     }
 
-    public void getSpecificApplication(String jobId, CallBack<Application> callBack) { //For activityAnalysis
+    public void getSpecificApplication(String jobId, CallBack<Application> callBack) { //For checking if the user has already applied for this job
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference(USERS_TABLE).child(userUid);

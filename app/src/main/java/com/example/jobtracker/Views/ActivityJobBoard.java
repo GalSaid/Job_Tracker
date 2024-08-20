@@ -33,7 +33,7 @@ public class ActivityJobBoard extends DrawerBaseActivity {
         activityJobBoardBinding=ActivityJobBoardBinding.inflate(getLayoutInflater());
         setContentView(activityJobBoardBinding.getRoot());
         allocateActivityTitle("All Jobs");
-        //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard for testing becUse we don't have a admin user
+        //MyDbManager.getInstance().createJobsAndLoadToDB(); //added jobs to jobBoard for testing because we don't have a admin user
         jobs = new ArrayList<>();
         findViews();
         initRecycleView();

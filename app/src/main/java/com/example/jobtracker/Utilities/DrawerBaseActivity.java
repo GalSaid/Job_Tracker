@@ -30,15 +30,15 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
     //For the menu with the options
     @Override
     public void setContentView(View view) {
-        drawerLayout=(DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer_base, null);
-        FrameLayout container=drawerLayout.findViewById(R.id.activityContainer);
+        drawerLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer_base, null);
+        FrameLayout container = drawerLayout.findViewById(R.id.activityContainer);
         container.addView(view);
         super.setContentView(drawerLayout);
-        Toolbar toolbar=drawerLayout.findViewById(R.id.toolbar);
+        Toolbar toolbar = drawerLayout.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        NavigationView navigationView =drawerLayout.findViewById(R.id.nav_view);
+        NavigationView navigationView = drawerLayout.findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.menu_drawer_open, R.string.menu_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.menu_drawer_open, R.string.menu_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -46,28 +46,26 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-        if(item.getItemId()==R.id.nav_allJobs){ //if the user clicks on the all jobs option
+        if (item.getItemId() == R.id.nav_allJobs) { //if the user clicks on the all jobs option
             startActivity(new Intent(this, ActivityJobBoard.class));
-            overridePendingTransition(0,0);
-        }
-        else if(item.getItemId()== R.id.nav_myApplications){//if the user clicks on the my applications option
+            overridePendingTransition(0, 0);
+        } else if (item.getItemId() == R.id.nav_myApplications) {//if the user clicks on the my applications option
             startActivity(new Intent(this, ActivityMyApplications.class));
-            overridePendingTransition(0,0);
+            overridePendingTransition(0, 0);
         } else if (item.getItemId() == R.id.nav_profile) {
             startActivity(new Intent(this, ActivityProfile.class));
             overridePendingTransition(0, 0);
-        } else if(item.getItemId()==R.id.nav_logout){//if the user clicks on the logout option
+        } else if (item.getItemId() == R.id.nav_logout) {//if the user clicks on the logout option
             logOut();
-        }
-        else if (item.getItemId() == R.id.nav_analysis) {//if the user clicks on the analysis option
+        } else if (item.getItemId() == R.id.nav_analysis) {//if the user clicks on the analysis option
             startActivity(new Intent(this, ActivityAnalysis.class));
             overridePendingTransition(0, 0);
         }
         return false;
     }
 
-    protected void allocateActivityTitle(String titleSting){
-        if(getSupportActionBar()!=null)
+    protected void allocateActivityTitle(String titleSting) {
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(titleSting);
     }
 
